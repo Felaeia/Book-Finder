@@ -39,5 +39,5 @@ yarn-error.*
 example
 
 # generated native folders
-/ios
-/android
+FE-Book-Finder/ios
+FE-Book-Finder/android

@@ -11,12 +11,9 @@ The primary goal of this structure is to keep code as close as possible to where
 ## 📁 Directory Structure
 
 ```text
-src/
+src/ 
+├── app/                        # Application routing (React Navigation)
 ├── assets/                     # Static assets (images, fonts, splash screens)
-├── components/                 # Shared components used across multiple features
-│   ├── Common/                 # App-aware shared components (Layout, Navbar, DataList)
-│   ├── Global/                 # "Dumb" / purely generic UI (CustomButton, Input)
-│   └── ui/                     # Base UI primitives & global screens (Login, Landing)
 ├── FEATURES/                   # Core business logic & domain-specific code
 │   ├── FEATURE1/               # First feature module
 │   ├── FEATURE2/               # Second feature module
@@ -26,7 +23,10 @@ src/
 │   │   │   └── SubComponent/   # Co-located sub-component (generic placeholder)
 │   │   └── lib/                # Feature-specific utilities, types, and helpers
 │   └── FEATURE3/               # Third feature module
-├── navigation/                 # Application routing (React Navigation)
+├── components/                 # Shared components used across multiple features
+│   ├── Common/                 # App-aware shared components (Layout, Navbar, DataList)
+│   ├── Global/                 # "Dumb" / purely generic UI (CustomButton, Input)
+│   └── ui/                     # Base UI primitives & global screens (Login, Landing)
 ├── theme/                      # Global styling: colors, spacing, typography
 ├── hooks/                      # Global custom hooks
 ├── lib/                        # Global utilities, API client, constants
