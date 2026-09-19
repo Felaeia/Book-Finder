@@ -12,24 +12,26 @@ The primary goal of this structure is to keep code as close as possible to where
 
 ```text
 src/
-├── assets/                     # Static assets (images, fonts, etc.)
+├── assets/                     # Static assets (images, fonts, splash screens)
 ├── components/                 # Shared components used across multiple features
-│   ├── Common/                 # App-aware shared components (Layout, Navbar, DataTable)
-│   ├── Global/                 # "Dumb" / purely generic UI (ExcelButton)
-│   └── ui/                     # Base UI primitives & global pages (Login, Landing)
+│   ├── Common/                 # App-aware shared components (Layout, Navbar, DataList)
+│   ├── Global/                 # "Dumb" / purely generic UI (CustomButton, Input)
+│   └── ui/                     # Base UI primitives & global screens (Login, Landing)
 ├── FEATURES/                   # Core business logic & domain-specific code
-│   ├── FEATURE1/               # FEATURE1 feature module
-│   ├── FEATURE2/               # FEATURE2 feature module
+│   ├── FEATURE1/               # First feature module
+│   ├── FEATURE2/               # Second feature module
 │   │   ├── api/                # Feature-specific API calls
 │   │   ├── components/         # Feature-specific UI components
-│   │   │   ├── pages/          # Page-level components
-│   │   │   └── CommentsField/  # Co-located sub-component
+│   │   │   ├── screens/        # Screen-level components
+│   │   │   └── SubComponent/   # Co-located sub-component (generic placeholder)
 │   │   └── lib/                # Feature-specific utilities, types, and helpers
-│   └── FEATURE3/               # FEATURE3 feature module
-├── Routes/                     # Application routing configuration
-├── App.tsx                     # Root component
-├── main.tsx                    # Entry point
-└── index.css                   # Global styles
+│   └── FEATURE3/               # Third feature module
+├── navigation/                 # Application routing (React Navigation)
+├── theme/                      # Global styling: colors, spacing, typography
+├── hooks/                      # Global custom hooks
+├── lib/                        # Global utilities, API client, constants
+├── App.tsx                     # Root component (Providers, NavigationContainer)
+└── index.js                    # Entry point (AppRegistry)
 ```
 
 ---
