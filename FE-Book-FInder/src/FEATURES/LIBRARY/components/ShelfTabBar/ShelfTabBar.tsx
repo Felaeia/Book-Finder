@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, View, TouchableOpacity, ScrollView } from "react-native";
 import { ShelfType } from "../../lib/types";
-import { Colors } from "@/theme/colors";
+import { Colors } from "@/src/theme/colors";
 
 export interface ShelfTab {
   key: ShelfType;

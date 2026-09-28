@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { LibraryStats } from "../../lib/types";
-import { Colors } from "@/theme/colors";
+import { Colors } from "@/src/theme/colors";
 
 export interface ShelfStatsHeaderProps {
   stats: LibraryStats;

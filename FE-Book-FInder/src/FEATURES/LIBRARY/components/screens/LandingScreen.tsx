@@ -1,9 +1,9 @@
 // src/components/ui/LandingScreen.tsx
 import { Feather } from "@expo/vector-icons";
 import { View, Text, TouchableOpacity, StatusBar } from "react-native";
-import BookCollage from "@/components/common/BookCollage";
+import BookCollage from "@/src/components/common/BookCollage";
 
-export default function LandingScreen() {
+export function LandingScreen() {
   return (
     <View className="flex-1 bg-[#F97316] pt-14 pb-8">
       <StatusBar barStyle="light-content" backgroundColor="#F97316" />

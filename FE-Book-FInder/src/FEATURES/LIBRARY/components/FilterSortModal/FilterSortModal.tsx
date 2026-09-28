@@ -8,7 +8,7 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 import { SortOption } from "../../lib/types";
-import { Colors } from "@/theme/colors";
+import { Colors } from "@/src/theme/colors";
 
 export interface FilterSortModalProps {
   visible: boolean;

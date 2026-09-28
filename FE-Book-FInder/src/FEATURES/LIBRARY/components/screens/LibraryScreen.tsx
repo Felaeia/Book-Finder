@@ -19,7 +19,7 @@ import { SearchBar } from "../SearchBar";
 import { FilterSortModal } from "../FilterSortModal";
 import { ProgressModal } from "../ProgressModal";
 import { EmptyShelfState } from "../EmptyShelfState";
-import { Colors } from "@/theme/colors";
+import { Colors } from "@/src/theme/colors";
 
 const { width } = Dimensions.get("window");
 

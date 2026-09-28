@@ -2,9 +2,9 @@ import React from "react";
 import { StyleSheet, Text, View, TouchableOpacity, Dimensions } from "react-native";
 import { Image } from "expo-image";
 import { Book } from "../../lib/types";
-import { Badge } from "@/components/Global/Badge";
-import { ProgressBar } from "@/components/Global/ProgressBar";
-import { Colors } from "@/theme/colors";
+import { Badge } from "@/src/components/Global/Badge";
+import { ProgressBar } from "@/src/components/Global/ProgressBar";
+import { Colors } from "@/src/theme/colors";
 
 const { width } = Dimensions.get("window");
 const CARD_WIDTH = (width - 48) / 2;

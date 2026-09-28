@@ -11,8 +11,8 @@ import {
 } from "react-native";
 import { Image } from "expo-image";
 import { Book, ShelfType } from "../../lib/types";
-import { Colors } from "@/theme/colors";
-import { ProgressBar } from "@/components/Global/ProgressBar";
+import { Colors } from "@/src/theme/colors";
+import { ProgressBar } from "@/src/components/Global/ProgressBar";
 
 export interface ProgressModalProps {
   book: Book | null;

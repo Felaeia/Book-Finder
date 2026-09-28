@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, TextInput, View, TouchableOpacity, Text } from "react-native";
 import { ViewMode, SortOption } from "../../lib/types";
-import { Colors } from "@/theme/colors";
+import { Colors } from "@/src/theme/colors";
 
 export interface SearchBarProps {
   value: string;
