@@ -1,83 +1,81 @@
-// SearchScreen.tsx
 import React from 'react';
-import { View, Text, TextInput, ScrollView, StyleSheet, TouchableOpacity, FlatList, Keyboard } from 'react-native';
+import { FlatList, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Theme } from '../../src/constants/Theme';
-import { useBookSearch } from '../hooks/useBookSearch';
-import { Book } from '../../types/books';
-import { BOOKS } from '../data/books';
+import { Theme } from '@/src/constants/Theme';
+import { useBookSearch } from '../components/FEATURES/SearchBooks/lib/useBookSearch';
+import { useSubjectBooks } from '../components/FEATURES/SearchBooks/lib/useSubjectBooks';
+import BookCarousel from '../components/FEATURES/SearchBooks/components/BookCarousel';
+import SearchBar from '../components/FEATURES/SearchBooks/components/SearchBar';
+import SearchHeader from '../components/FEATURES/SearchBooks/components/SearchHeader';
+import SubjectGroupCard from '../components/FEATURES/SearchBooks/components/SubjectGroupCard';
+
+// Subject slugs recognized by Open Library's Subjects API.
+const RECOMMENDED_SUBJECT = 'fiction';
+const GROUP_SUBJECTS = ['Horror', 'Romance'];
+const THUMBS_PER_GROUP = 3;
 
 export default function SearchScreen() {
-  const { query, setQuery, isFocused, setIsFocused, suggestions, selectSuggestion } = useBookSearch(BOOKS);
+  const {
+    query,
+    setQuery,
+    isFocused,
+    setIsFocused,
+    suggestions,
+    loading: searchLoading,
+    error: searchError,
+    selectSuggestion,
+  } = useBookSearch();
+
+  const { books: recommended, loading: recommendedLoading } = useSubjectBooks(RECOMMENDED_SUBJECT, 10);
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <ScrollView
-        contentContainerStyle={styles.scrollContent}
-        keyboardShouldPersistTaps="handled"
-      >
-        {/* Header Placeholders */}
-        <View style={styles.header}>
-          <Text style={styles.menuIcon}>☰</Text>
-          <Text style={styles.logo}>📖 BookFinder</Text>
-          <View style={styles.avatar} />
-        </View>
+      <ScrollView contentContainerStyle={styles.scrollContent} keyboardShouldPersistTaps="handled">
+        <SearchHeader userName="Jilliane" />
 
-        <Text style={styles.welcomeText}>Welcome{"\n"}back <Text style={styles.userName}>Jilliane</Text></Text>
+        <SearchBar
+          query={query}
+          setQuery={setQuery}
+          isFocused={isFocused}
+          setIsFocused={setIsFocused}
+          suggestions={suggestions}
+          loading={searchLoading}
+          error={searchError}
+          onSelect={selectSuggestion}
+        />
 
-        {/* Search Box */}
-        <View style={styles.searchContainer}>
-          <TextInput
-            style={styles.searchInput}
-            value={query}
-            onChangeText={setQuery}
-            onFocus={() => setIsFocused(true)}
-            onBlur={() => setIsFocused(false)}
-            placeholder="Search for author or book"
-            placeholderTextColor={Theme.colors.textMuted}
-            autoCapitalize="none"
-            autoCorrect={false}
-            returnKeyType="search"
-          />
+        <BookCarousel
+          title="Selected for you"
+          books={recommended}
+          loading={recommendedLoading}
+          onSeeAll={() => {}}
+        />
 
-          {/* Suggestion Dropdown */}
-          {isFocused && query.length > 0 && (
-            <View style={styles.dropdown}>
-              {suggestions.length > 0 ? (
-                suggestions.map((book: Book) => (
-                  <TouchableOpacity
-                    key={book.id}
-                    style={styles.suggestionItem}
-                    onPress={() => {
-                      selectSuggestion(book);
-                      Keyboard.dismiss();
-                    }}
-                  >
-                    <Text style={styles.suggestionText}>{book.title}</Text>
-                  </TouchableOpacity>
-                ))
-              ) : (
-                <Text style={styles.noResultsText}>No books found</Text>
-              )}
-            </View>
-          )}
-        </View>
-
-        {/* Carousels */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Selected for you</Text>
-          <FlatList
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            data={BOOKS.filter((b: Book) => b.recommended)}
-            keyExtractor={item => item.id}
-            renderItem={({ item }) => <View style={styles.placeholderBook} />}
-            contentContainerStyle={styles.carouselList}
-          />
-        </View>
+        <GroupSection subjects={GROUP_SUBJECTS} />
       </ScrollView>
     </SafeAreaView>
   );
+}
+
+function GroupSection({ subjects }: { subjects: string[] }) {
+  return (
+    <View style={styles.groupSection}>
+      <Text style={styles.groupTitle}>By group</Text>
+      <FlatList
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        data={subjects}
+        keyExtractor={(subject) => subject}
+        renderItem={({ item }) => <SubjectGroup subject={item} />}
+        contentContainerStyle={styles.groupList}
+      />
+    </View>
+  );
+}
+
+function SubjectGroup({ subject }: { subject: string }) {
+  const { books } = useSubjectBooks(subject, THUMBS_PER_GROUP);
+  return <SubjectGroupCard subjectLabel={subject} books={books} />;
 }
 
 const styles = StyleSheet.create({
@@ -89,80 +87,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: Theme.spacing.screenHorizontal,
     paddingBottom: 100,
   },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginVertical: 20,
-  },
-  menuIcon: { color: Theme.colors.textPrimary, fontSize: 24 },
-  logo: { color: Theme.colors.accent, fontSize: 20, fontWeight: 'bold' },
-  avatar: { width: 40, height: 40, borderRadius: 20, backgroundColor: Theme.colors.surface },
-  welcomeText: {
-    fontSize: 32,
-    color: Theme.colors.textPrimary,
-    fontWeight: 'bold',
-    marginBottom: 24,
-  },
-  userName: {
-    color: Theme.colors.accent,
-  },
-  searchContainer: {
-    position: 'relative',
-    zIndex: 10,
-    elevation: 10,
+  groupSection: {
     marginBottom: 32,
   },
-  searchInput: {
-    backgroundColor: Theme.colors.surface,
-    color: Theme.colors.textDark,
-    borderRadius: Theme.radius.input,
-    padding: 16,
-    fontSize: 16,
-  },
-  dropdown: {
-    position: 'absolute',
-    top: 60,
-    left: 0,
-    right: 0,
-    backgroundColor: Theme.colors.surface,
-    borderRadius: Theme.radius.card,
-    padding: 8,
-    zIndex: 20,
-    elevation: 20,
-    shadowColor: '#000',
-    shadowOpacity: 0.2,
-    shadowRadius: 5,
-  },
-  suggestionItem: {
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-  },
-  suggestionText: {
-    color: Theme.colors.textDark,
-    fontSize: 16,
-  },
-  noResultsText: {
-    padding: 16,
-    color: Theme.colors.textMuted,
-    textAlign: 'center',
-  },
-  section: {
-    marginBottom: 32,
-  },
-  sectionTitle: {
+  groupTitle: {
     color: Theme.colors.textPrimary,
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 16,
   },
-  carouselList: {
-    gap: Theme.spacing.itemGap,
+  groupList: {
+    paddingRight: Theme.spacing.screenHorizontal,
   },
-  placeholderBook: {
-    width: 120,
-    height: 180,
-    backgroundColor: '#333',
-    borderRadius: Theme.radius.card,
-  }
 });
