@@ -1,10 +1,15 @@
 // import { LibraryScreen } from "@/src/FEATURES/LIBRARY";
 import "../../global.css";
 
-import { LibraryScreen } from "../screens/LibraryScreen";
+import { useState } from "react";
+import { OpeningScreen } from "../screens/OpeningScreen";
+import { LandingScreen } from "../screens/LandingScreen";
 
-export default function Index() {
-  return (
-    <LibraryScreen />
-  );
+export default function App() {
+  const [showSplash, setShowSplash] = useState(true);
+
+  if (showSplash) {
+    return <OpeningScreen onFinish={() => setShowSplash(false)} />;
+  }
+  return <LandingScreen />;
 }

@@ -1,76 +1,66 @@
 import { Feather } from "@expo/vector-icons";
-import { View, Text, TouchableOpacity, StatusBar } from "react-native";
+import { View, Text, TouchableOpacity, StatusBar, Pressable } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import BookCollage from "../components/common/BookCollage";
 
 export function LandingScreen() {
   return (
-    <View className="flex-1 bg-[#F97316] pt-14 pb-8">
+    <View className="flex-1 bg-[#F97316]">
       <StatusBar barStyle="light-content" backgroundColor="#F97316" />
+      <SafeAreaView className="flex-1 pt-2 pb-6">
 
-      {/* Top: WELCOME TO badge */}
-      <View className="flex-row items-center justify-center">
-        <View className="flex-row items-center bg-white/15 px-3 py-1.5 rounded-full border border-white/30">
-          <Feather name="book-open" size={12} color="#FFFFFF" />
-          <Text className="text-[10px] font-bold text-white ml-1.5 tracking-widest">
-            WELCOME TO
+        {/* TOP - This is the fix */}
+        <View className="items-center justify-center mt-4">
+          {/* 1. Badge */}
+          <View className="flex-row items-center bg-white/20 px-3.5 py-1.5 rounded-full border border-white/40">
+            <Feather name="book-open" size={12} color="#FFF" />
+            <Text className="text- font-bold text-white ml-1.5 tracking-[1.8px]">
+              WELCOME TO
+            </Text>
+          </View>
+
+          {/* 2. App name goes DOWN now - it's in a column */}
+          <Text className="text- font-extrabold text-white text-center tracking-tight mt-3">
+            BookFinder
           </Text>
         </View>
-      </View>
 
-      {/* Middle: Collage takes remaining space */}
-      <View className="flex-1">
-        <BookCollage />
-      </View>
+        <View className="flex-1">
+          <BookCollage />
+        </View>
 
-      {/* Title + Subtitle (no flex — sized to content) */}
-      <View className="px-[30px] pb-6">
-        <Text className="text-[42px] font-extrabold text-white mb-3 text-center">
-          BookFinder
-        </Text>
-        <Text className="text-base text-white text-center opacity-90 leading-6 font-normal">
-          Discover captivating stories, that transport you to different worlds
-          with every read
-        </Text>
-      </View>
-
-      {/* Bottom: Actions (no flex — anchored at bottom) */}
-      <View className="px-6 gap-3">
-        <TouchableOpacity
-          className="bg-white py-4 rounded-xl items-center justify-center flex-row"
-          onPress={() => console.log("Log in pressed")}
-          activeOpacity={0.85}
-          style={{
-            shadowColor: "#000",
-            shadowOffset: { width: 0, height: 4 },
-            shadowOpacity: 0.15,
-            shadowRadius: 8,
-            elevation: 3,
-          }}
-        >
-          <Feather name="log-in" size={18} color="#F97316" />
-          <Text className="text-[#F97316] text-base font-bold ml-2 leading-5">
-            Log in
+        <View className="px-8 pb-6">
+          <Text className="text- text-white text-center leading-6 font-medium opacity-95">
+            Discover captivating stories that transport you to different worlds with every read
           </Text>
-        </TouchableOpacity>
+        </View>
 
-        <TouchableOpacity
-          className="bg-transparent border-2 border-white py-4 rounded-xl items-center justify-center flex-row"
-          onPress={() => console.log("Sign up pressed")}
-          activeOpacity={0.85}
-        >
-          <Feather name="user-plus" size={18} color="#FFFFFF" />
-          <Text className="text-white text-base font-bold ml-2 leading-5">
-            Sign up
-          </Text>
-        </TouchableOpacity>
+        <View className="px-6 gap-3.5">
+          <TouchableOpacity
+            className="bg-white py- rounded-xl items-center justify-center flex-row"
+            activeOpacity={0.9}
+            style={{ elevation: 4, shadowColor: "#000", shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.15, shadowRadius: 8 }}
+          >
+            <Feather name="user-plus" size={30} color="#F97316" />
+            <Text className="text-[#F97316] text- font-bold ml-2">Sign up</Text>
+          </TouchableOpacity>
 
-        <Text className="text-white text-xs text-center opacity-70 mt-2 leading-4">
-          By continuing, you agree to our{" "}
-          <Text className="underline font-semibold">Terms</Text>
-          {" "}&{" "}
-          <Text className="underline font-semibold">Privacy Policy</Text>
-        </Text>
-      </View>
+          <TouchableOpacity
+            className="bg-transparent border-[1.5px] border-white py- rounded-xl items-center justify-center flex-row"
+            activeOpacity={0.9}
+          >
+            <Feather name="log-in" size={29} color="#FFF" />
+            <Text className="text-white text- font-bold ml-2">Log in</Text>
+          </TouchableOpacity>
+
+          <View className="flex-row justify-center items-center mt-2 flex-wrap">
+            <Text className="text-white text- opacity-90">By continuing, you agree to our </Text>
+            <Pressable><Text className="text-white text- underline font-semibold">Terms</Text></Pressable>
+            <Text className="text-white text- opacity-90"> & </Text>
+            <Pressable><Text className="text-white text- underline font-semibold">Privacy Policy</Text></Pressable>
+          </View>
+        </View>
+      </SafeAreaView>
     </View>
   );
 }
