@@ -4,7 +4,7 @@ import "../../global.css";
 import { useState } from "react";
 import { OpeningScreen } from "../screens/OpeningScreen";
 // import { LandingScreen } from "../screens/LandingScreen";
-import SearchScreen from "../screens/SearchScreen";
+import { LibraryScreen } from "../screens/SavedBooksScreen";
 
 export default function App() {
   const [showSplash, setShowSplash] = useState(true);
@@ -12,5 +12,5 @@ export default function App() {
   if (showSplash) {
     return <OpeningScreen onFinish={() => setShowSplash(false)} />;
   }
-  return <SearchScreen></SearchScreen>
+  return <LibraryScreen></LibraryScreen>;
 }
