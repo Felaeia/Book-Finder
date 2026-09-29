@@ -1,17 +1,17 @@
-import React from 'react';
-import { FlatList, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { Theme } from '@/src/constants/Theme';
-import { useBookSearch } from '../components/FEATURES/SearchBooks/lib/useBookSearch';
-import { useSubjectBooks } from '../components/FEATURES/SearchBooks/lib/useSubjectBooks';
-import BookCarousel from '../components/FEATURES/SearchBooks/components/BookCarousel';
-import SearchBar from '../components/FEATURES/SearchBooks/components/SearchBar';
-import SearchHeader from '../components/FEATURES/SearchBooks/components/SearchHeader';
-import SubjectGroupCard from '../components/FEATURES/SearchBooks/components/SubjectGroupCard';
+import { Theme } from "@/src/constants/Theme";
+import React from "react";
+import { FlatList, ScrollView, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import BookCarousel from "../components/Features/SearchBooks/components/BookCarousel";
+import SearchBar from "../components/Features/SearchBooks/components/SearchBar";
+import SearchHeader from "../components/Features/SearchBooks/components/SearchHeader";
+import SubjectGroupCard from "../components/Features/SearchBooks/components/SubjectGroupCard";
+import { useBookSearch } from "../components/Features/SearchBooks/lib/useBookSearch";
+import { useSubjectBooks } from "../components/Features/SearchBooks/lib/useSubjectBooks";
 
 // Subject slugs recognized by Open Library's Subjects API.
-const RECOMMENDED_SUBJECT = 'fiction';
-const GROUP_SUBJECTS = ['Horror', 'Romance'];
+const RECOMMENDED_SUBJECT = "fiction";
+const GROUP_SUBJECTS = ["Horror", "Romance"];
 const THUMBS_PER_GROUP = 3;
 
 export default function SearchScreen() {
@@ -26,11 +26,17 @@ export default function SearchScreen() {
     selectSuggestion,
   } = useBookSearch();
 
-  const { books: recommended, loading: recommendedLoading } = useSubjectBooks(RECOMMENDED_SUBJECT, 10);
+  const { books: recommended, loading: recommendedLoading } = useSubjectBooks(
+    RECOMMENDED_SUBJECT,
+    10,
+  );
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <ScrollView contentContainerStyle={styles.scrollContent} keyboardShouldPersistTaps="handled">
+      <ScrollView
+        contentContainerStyle={styles.scrollContent}
+        keyboardShouldPersistTaps="handled"
+      >
         <SearchHeader userName="Jilliane" />
 
         <SearchBar
@@ -93,7 +99,7 @@ const styles = StyleSheet.create({
   groupTitle: {
     color: Theme.colors.textPrimary,
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 16,
   },
   groupList: {

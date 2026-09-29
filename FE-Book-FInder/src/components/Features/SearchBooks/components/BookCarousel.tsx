@@ -1,8 +1,14 @@
-import React from 'react';
-import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { Theme } from '@/src/constants/Theme';
-import { Book } from '../lib/types';
-import BookCard from './BookCard';
+import { Theme } from "@/src/constants/Theme";
+import React from "react";
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { Book } from "../lib/types";
+import BookCard from "./BookCard";
 
 type Props = {
   title: string;
@@ -11,7 +17,12 @@ type Props = {
   onSeeAll?: () => void;
 };
 
-export default function BookCarousel({ title, books, loading, onSeeAll }: Props) {
+export default function BookCarousel({
+  title,
+  books,
+  loading,
+  onSeeAll,
+}: Props) {
   return (
     <View style={styles.section}>
       <View style={styles.sectionHeader}>
@@ -40,15 +51,15 @@ const styles = StyleSheet.create({
     marginBottom: 32,
   },
   sectionHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginBottom: 16,
   },
   sectionTitle: {
     color: Theme.colors.textPrimary,
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   seeAllButton: {
     borderWidth: 1,

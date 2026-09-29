@@ -1,7 +1,15 @@
-import React from 'react';
-import { ActivityIndicator, Keyboard, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import { Theme } from '@/src/constants/Theme';
-import { Book } from '../lib/types';
+import { Theme } from "@/src/constants/Theme";
+import React from "react";
+import {
+  ActivityIndicator,
+  Keyboard,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { Book } from "../lib/types";
 
 type Props = {
   query: string;
@@ -44,7 +52,10 @@ export default function SearchBar({
       {showDropdown && (
         <View style={styles.dropdown}>
           {loading ? (
-            <ActivityIndicator style={styles.loading} color={Theme.colors.accent} />
+            <ActivityIndicator
+              style={styles.loading}
+              color={Theme.colors.accent}
+            />
           ) : error ? (
             <Text style={styles.noResultsText}>{error}</Text>
           ) : suggestions.length > 0 ? (
@@ -73,7 +84,7 @@ export default function SearchBar({
 
 const styles = StyleSheet.create({
   container: {
-    position: 'relative',
+    position: "relative",
     zIndex: 10,
     elevation: 10,
     marginBottom: 32,
@@ -86,7 +97,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   dropdown: {
-    position: 'absolute',
+    position: "absolute",
     top: 60,
     left: 0,
     right: 0,
@@ -95,7 +106,7 @@ const styles = StyleSheet.create({
     padding: 8,
     zIndex: 20,
     elevation: 20,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOpacity: 0.2,
     shadowRadius: 5,
   },
@@ -113,6 +124,6 @@ const styles = StyleSheet.create({
   noResultsText: {
     padding: 16,
     color: Theme.colors.textMuted,
-    textAlign: 'center',
+    textAlign: "center",
   },
 });

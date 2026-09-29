@@ -1,7 +1,7 @@
-import React from 'react';
-import { Image, StyleSheet, Text, View } from 'react-native';
-import { Theme } from '@/src/constants/Theme';
-import { Book } from '../lib/types';
+import { Theme } from "@/src/constants/Theme";
+import React from "react";
+import { Image, StyleSheet, Text, View } from "react-native";
+import { Book } from "../lib/types";
 
 type Props = {
   subjectLabel: string;
@@ -10,7 +10,7 @@ type Props = {
 
 const THUMB_WIDTH = 64;
 const THUMB_HEIGHT = 96;
-const CLUSTER_BG = '#2a1414';
+const CLUSTER_BG = "#2a1414";
 
 export default function SubjectGroupCard({ subjectLabel, books }: Props) {
   const thumbs = books.slice(0, 3);
@@ -23,11 +23,18 @@ export default function SubjectGroupCard({ subjectLabel, books }: Props) {
             key={book.id}
             style={[
               styles.thumbWrapper,
-              { marginLeft: index === 0 ? 0 : -24, zIndex: thumbs.length - index },
+              {
+                marginLeft: index === 0 ? 0 : -24,
+                zIndex: thumbs.length - index,
+              },
             ]}
           >
             {book.coverUrl ? (
-              <Image source={{ uri: book.coverUrl }} style={styles.thumb} resizeMode="cover" />
+              <Image
+                source={{ uri: book.coverUrl }}
+                style={styles.thumb}
+                resizeMode="cover"
+              />
             ) : (
               <View style={styles.thumb} />
             )}
@@ -41,30 +48,30 @@ export default function SubjectGroupCard({ subjectLabel, books }: Props) {
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: 'center',
+    alignItems: "center",
     marginRight: 24,
   },
   stack: {
-    flexDirection: 'row',
+    flexDirection: "row",
     backgroundColor: CLUSTER_BG,
     borderRadius: Theme.radius.card,
     padding: 12,
   },
   thumbWrapper: {
     borderRadius: Theme.radius.card,
-    overflow: 'hidden',
+    overflow: "hidden",
     borderWidth: 2,
     borderColor: CLUSTER_BG,
   },
   thumb: {
     width: THUMB_WIDTH,
     height: THUMB_HEIGHT,
-    backgroundColor: '#333',
+    backgroundColor: "#333",
   },
   label: {
     color: Theme.colors.textPrimary,
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: "600",
     marginTop: 8,
   },
 });

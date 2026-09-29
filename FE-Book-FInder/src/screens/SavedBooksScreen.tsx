@@ -1,24 +1,33 @@
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
-  StyleSheet,
-  View,
-  Text,
+  Dimensions,
   FlatList,
   RefreshControl,
   SafeAreaView,
   StatusBar,
-  Dimensions,
+  StyleSheet,
+  Text,
+  View,
 } from "react-native";
-import { Book, ShelfType, SortOption, ViewMode, LibraryStats } from "../components/FEATURES/LIBRARY/lib/types";
-import { libraryApi } from "../components/FEATURES/LIBRARY/api/libraryApi";
-import { ShelfTabBar, ShelfTab } from "../components/FEATURES/LIBRARY/components/ShelfTabBar";
-import { ShelfStatsHeader } from "../components/FEATURES/LIBRARY/components/ShelfStatsHeader";
-import { BookGridCard } from "../components/FEATURES/LIBRARY/components/BookCard/BookGridCard";
-import { BookListCard } from "../components/FEATURES/LIBRARY/components/BookCard/BookListCard";
-import { SearchBar } from "../components/FEATURES/LIBRARY/components/SearchBar";
-import { FilterSortModal } from "../components/FEATURES/LIBRARY/components/FilterSortModal";
-import { ProgressModal } from "../components/FEATURES/LIBRARY/components/ProgressModal";
-import { EmptyShelfState } from "../components/FEATURES/LIBRARY/components/EmptyShelfState";
+import { libraryApi } from "../components/Features/SaveBooks/api/libraryApi";
+import { BookGridCard } from "../components/Features/SaveBooks/components/BookCard/BookGridCard";
+import { BookListCard } from "../components/Features/SaveBooks/components/BookCard/BookListCard";
+import { EmptyShelfState } from "../components/Features/SaveBooks/components/EmptyShelfState";
+import { FilterSortModal } from "../components/Features/SaveBooks/components/FilterSortModal";
+import { ProgressModal } from "../components/Features/SaveBooks/components/ProgressModal";
+import { SearchBar } from "../components/Features/SaveBooks/components/SearchBar";
+import { ShelfStatsHeader } from "../components/Features/SaveBooks/components/ShelfStatsHeader";
+import {
+  ShelfTab,
+  ShelfTabBar,
+} from "../components/Features/SaveBooks/components/ShelfTabBar";
+import {
+  Book,
+  LibraryStats,
+  ShelfType,
+  SortOption,
+  ViewMode,
+} from "../components/Features/SaveBooks/lib/types";
 import { Colors } from "../theme/colors";
 
 const { width } = Dimensions.get("window");
@@ -72,7 +81,11 @@ export function LibraryScreen() {
     return [
       { key: "all", label: "All Books", count: stats.totalBooks },
       { key: "reading", label: "Reading", count: stats.booksReading },
-      { key: "want_to_read", label: "Want to Read", count: stats.booksWantToRead },
+      {
+        key: "want_to_read",
+        label: "Want to Read",
+        count: stats.booksWantToRead,
+      },
       { key: "completed", label: "Finished", count: stats.booksCompleted },
       { key: "favorites", label: "Favorites", count: stats.booksFavorites },
     ];
@@ -93,7 +106,9 @@ export function LibraryScreen() {
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase().trim();
       result = result.filter(
-        (b) => b.title.toLowerCase().includes(q) || b.author.toLowerCase().includes(q)
+        (b) =>
+          b.title.toLowerCase().includes(q) ||
+          b.author.toLowerCase().includes(q),
       );
     }
 
@@ -113,7 +128,9 @@ export function LibraryScreen() {
         }
         case "recent":
         default:
-          return new Date(b.dateAdded).getTime() - new Date(a.dateAdded).getTime();
+          return (
+            new Date(b.dateAdded).getTime() - new Date(a.dateAdded).getTime()
+          );
       }
     });
 
@@ -135,7 +152,10 @@ export function LibraryScreen() {
     }
   };
 
-  const handleUpdateShelf = async (bookId: string, newShelf: Exclude<ShelfType, "all">) => {
+  const handleUpdateShelf = async (
+    bookId: string,
+    newShelf: Exclude<ShelfType, "all">,
+  ) => {
     try {
       const updated = await libraryApi.updateShelf(bookId, newShelf);
       setBooks((prev) => prev.map((b) => (b.id === bookId ? updated : b)));
@@ -204,7 +224,9 @@ export function LibraryScreen() {
         <View style={styles.header}>
           <View>
             <Text style={styles.headerTitle}>My Library</Text>
-            <Text style={styles.headerSubtitle}>Personal Bookshelf & Reading Progress</Text>
+            <Text style={styles.headerSubtitle}>
+              Personal Bookshelf & Reading Progress
+            </Text>
           </View>
         </View>
 
@@ -215,7 +237,9 @@ export function LibraryScreen() {
           numColumns={viewMode === "grid" ? 2 : 1}
           keyExtractor={(item) => item.id}
           contentContainerStyle={styles.listContent}
-          columnWrapperStyle={viewMode === "grid" ? styles.gridColumnWrapper : undefined}
+          columnWrapperStyle={
+            viewMode === "grid" ? styles.gridColumnWrapper : undefined
+          }
           refreshControl={
             <RefreshControl
               refreshing={refreshing}
@@ -240,7 +264,9 @@ export function LibraryScreen() {
                 value={searchQuery}
                 onChangeText={setSearchQuery}
                 viewMode={viewMode}
-                onToggleViewMode={() => setViewMode(viewMode === "grid" ? "list" : "grid")}
+                onToggleViewMode={() =>
+                  setViewMode(viewMode === "grid" ? "list" : "grid")
+                }
                 currentSort={sortOption}
                 onOpenFilterSort={() => setFilterSortModalVisible(true)}
               />
