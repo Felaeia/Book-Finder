@@ -54,19 +54,15 @@ export default function BookCollage() {
 const styles = StyleSheet.create({
   collageContainer: {
     width: "100%",
-    flex: 1,                  // <-- Changed from height: "65%"
+    flex: 1,                  
     position: "relative",
     marginTop: 20,
-    overflow: "hidden",       // <-- Added
+    overflow: "hidden",       
   },
   bookImage: {
     position: "absolute",
     borderRadius: 8,
     resizeMode: "cover",
-    // shadowColor: "#000",
-    // shadowOffset: { width: 0, height: 6 },
-    // shadowOpacity: 0.3,
-    // shadowRadius: 8,
     elevation: 8,
   },
 });
