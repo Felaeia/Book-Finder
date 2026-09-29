@@ -1,5 +1,5 @@
 // data/books.ts
-import { Book, GenreGroup } from '../types/books';
+import { Book, GenreGroup } from '../../types/books';
 
 // The complete searchable book list
 export const BOOKS: Book[] = [

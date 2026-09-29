@@ -1,17 +1,18 @@
+// SearchScreen.tsx
 import React from 'react';
 import { View, Text, TextInput, ScrollView, StyleSheet, TouchableOpacity, FlatList, Keyboard } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Theme } from '../../constants/Theme';
-import { useBookSearch } from '../../hooks/useBookSearch';
-import { Book } from '../../types/books'; // Assuming you create this based on Step 3.2
-import { BOOKS } from '../../data/books';
+import { Theme } from '../../src/constants/Theme';
+import { useBookSearch } from '../hooks/useBookSearch';
+import { Book } from '../../types/books';
+import { BOOKS } from '../data/books';
 
-export default function HomeSearchScreen() {
+export default function SearchScreen() {
   const { query, setQuery, isFocused, setIsFocused, suggestions, selectSuggestion } = useBookSearch(BOOKS);
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <ScrollView 
+      <ScrollView
         contentContainerStyle={styles.scrollContent}
         keyboardShouldPersistTaps="handled"
       >
@@ -38,14 +39,14 @@ export default function HomeSearchScreen() {
             autoCorrect={false}
             returnKeyType="search"
           />
-          
+
           {/* Suggestion Dropdown */}
           {isFocused && query.length > 0 && (
             <View style={styles.dropdown}>
               {suggestions.length > 0 ? (
                 suggestions.map((book: Book) => (
-                  <TouchableOpacity 
-                    key={book.id} 
+                  <TouchableOpacity
+                    key={book.id}
                     style={styles.suggestionItem}
                     onPress={() => {
                       selectSuggestion(book);
@@ -70,7 +71,7 @@ export default function HomeSearchScreen() {
             showsHorizontalScrollIndicator={false}
             data={BOOKS.filter((b: Book) => b.recommended)}
             keyExtractor={item => item.id}
-            renderItem={({item}) => <View style={styles.placeholderBook} />}
+            renderItem={({ item }) => <View style={styles.placeholderBook} />}
             contentContainerStyle={styles.carouselList}
           />
         </View>
@@ -86,7 +87,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     paddingHorizontal: Theme.spacing.screenHorizontal,
-    paddingBottom: 100, // Keeps content above floating tab bar
+    paddingBottom: 100,
   },
   header: {
     flexDirection: 'row',

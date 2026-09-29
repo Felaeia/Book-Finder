@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { Book } from '../types/books';
+import { Book } from '../../types/books';
 
 export function useBookSearch(books: Book[]) {
   const [query, setQuery] = useState('');
