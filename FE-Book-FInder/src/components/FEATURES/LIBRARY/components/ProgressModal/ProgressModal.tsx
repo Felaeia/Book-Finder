@@ -12,7 +12,7 @@ import {
 import { Image } from "expo-image";
 import { Book, ShelfType } from "../../lib/types";
 import { Colors } from "@/src/theme/colors";
-import { ProgressBar } from "@/src/components/Global/ProgressBar";
+import { ProgressBar } from "@/src/components/.Global/ProgressBar";
 
 export interface ProgressModalProps {
   book: Book | null;

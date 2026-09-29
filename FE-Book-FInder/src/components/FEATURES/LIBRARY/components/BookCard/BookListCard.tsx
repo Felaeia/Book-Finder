@@ -2,8 +2,8 @@ import React from "react";
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { Image } from "expo-image";
 import { Book } from "../../lib/types";
-import { Badge } from "@/src/components/Global/Badge";
-import { ProgressBar } from "@/src/components/Global/ProgressBar";
+import { Badge } from "@/src/components/.Global/Badge";
+import { ProgressBar } from "@/src/components/.Global/ProgressBar";
 import { Colors } from "@/src/theme/colors";
 
 export interface BookListCardProps {

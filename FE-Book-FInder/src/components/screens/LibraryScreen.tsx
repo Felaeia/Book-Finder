@@ -9,17 +9,17 @@ import {
   StatusBar,
   Dimensions,
 } from "react-native";
-import { Book, ShelfType, SortOption, ViewMode, LibraryStats } from "../../lib/types";
-import { libraryApi } from "../../api/libraryApi";
-import { ShelfTabBar, ShelfTab } from "../ShelfTabBar";
-import { ShelfStatsHeader } from "../ShelfStatsHeader";
-import { BookGridCard } from "../BookCard/BookGridCard";
-import { BookListCard } from "../BookCard/BookListCard";
-import { SearchBar } from "../SearchBar";
-import { FilterSortModal } from "../FilterSortModal";
-import { ProgressModal } from "../ProgressModal";
-import { EmptyShelfState } from "../EmptyShelfState";
-import { Colors } from "@/src/theme/colors";
+import { Book, ShelfType, SortOption, ViewMode, LibraryStats } from "../FEATURES/LIBRARY/lib/types";
+import { libraryApi } from "../FEATURES/LIBRARY/api/libraryApi";
+import { ShelfTabBar, ShelfTab } from "../FEATURES/LIBRARY/components/ShelfTabBar";
+import { ShelfStatsHeader } from "../FEATURES/LIBRARY/components/ShelfStatsHeader";
+import { BookGridCard } from "../FEATURES/LIBRARY/components/BookCard/BookGridCard";
+import { BookListCard } from "../FEATURES/LIBRARY/components/BookCard/BookListCard";
+import { SearchBar } from "../FEATURES/LIBRARY/components/SearchBar";
+import { FilterSortModal } from "../FEATURES/LIBRARY/components/FilterSortModal";
+import { ProgressModal } from "../FEATURES/LIBRARY/components/ProgressModal";
+import { EmptyShelfState } from "../FEATURES/LIBRARY/components/EmptyShelfState";
+import { Colors } from "../../theme/colors";
 
 const { width } = Dimensions.get("window");
 
