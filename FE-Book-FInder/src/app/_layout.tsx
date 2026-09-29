@@ -1,6 +1,6 @@
 // import { Stack } from "expo-router";
 // import { SafeAreaProvider } from "react-native-safe-area-context";
-import { LandingScreen } from "../components/FEATURES/LIBRARY";
+import { LandingScreen } from "./LandingScreen"
 import { View } from "react-native";
 
 export default function RootLayout() {

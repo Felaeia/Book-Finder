@@ -1,6 +1,6 @@
 import { Feather } from "@expo/vector-icons";
 import { View, Text, TouchableOpacity, StatusBar } from "react-native";
-import BookCollage from "../common/BookCollage";
+import BookCollage from "../components/common/BookCollage";
 
 export function LandingScreen() {
   return (
