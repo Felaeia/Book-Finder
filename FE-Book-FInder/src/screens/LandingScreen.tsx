@@ -1,4 +1,5 @@
 import { Feather } from "@expo/vector-icons";
+import { router } from "expo-router";
 import { View, Text, TouchableOpacity, StatusBar, Pressable } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import BookCollage from "../components/common/BookCollage";
@@ -48,6 +49,7 @@ export function LandingScreen() {
           <TouchableOpacity
             className="bg-transparent border-[1.5px] border-white py- rounded-xl items-center justify-center flex-row"
             activeOpacity={0.9}
+            onPress={() => router.push("/login")}
           >
             <Feather name="log-in" size={29} color="#FFF" />
             <Text className="text-white text- font-bold ml-2">Log in</Text>
