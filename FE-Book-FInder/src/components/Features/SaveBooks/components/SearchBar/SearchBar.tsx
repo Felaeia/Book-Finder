@@ -1,4 +1,5 @@
 import React from "react";
+import { Ionicons } from "@expo/vector-icons";
 import { StyleSheet, TextInput, View, TouchableOpacity, Text } from "react-native";
 import { ViewMode, SortOption } from "../../lib/types";
 import { Colors } from "@/src/theme/colors";
@@ -53,8 +54,10 @@ export function SearchBar({
         style={styles.iconButton}
         onPress={onToggleViewMode}
         activeOpacity={0.7}
+        accessibilityRole="button"
+        accessibilityLabel={viewMode === "grid" ? "Switch to list view" : "Switch to grid view"}
       >
-        <Text style={styles.btnIcon}>{viewMode === "grid" ? "☰" : "⊞"}</Text>
+        <Ionicons name={viewMode === "grid" ? "list-outline" : "grid-outline"} size={20} color={Colors.text} />
       </TouchableOpacity>
     </View>
   );

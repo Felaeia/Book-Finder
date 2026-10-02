@@ -4,6 +4,23 @@ import { INITIAL_BOOKS } from "../lib/mockData";
 let booksStore: Book[] = [...INITIAL_BOOKS];
 
 export const libraryApi = {
+  async addBook(book: Omit<Book, "shelf" | "rating" | "currentPage" | "totalPages" | "dateAdded" | "isFavorite">): Promise<Book> {
+    const existingBook = booksStore.find((savedBook) => savedBook.id === book.id);
+    if (existingBook) return existingBook;
+
+    const savedBook: Book = {
+      ...book,
+      shelf: "want_to_read",
+      rating: 0,
+      currentPage: 0,
+      totalPages: 0,
+      dateAdded: new Date().toISOString(),
+      isFavorite: false,
+    };
+    booksStore = [savedBook, ...booksStore];
+    return savedBook;
+  },
+
   async getBooks(shelf?: ShelfType): Promise<Book[]> {
     if (!shelf || shelf === "all") {
       return [...booksStore];

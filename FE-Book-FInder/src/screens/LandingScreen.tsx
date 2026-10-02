@@ -1,14 +1,19 @@
 import { Feather } from "@expo/vector-icons";
-import { View, Text, TouchableOpacity, StatusBar, Pressable } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StatusBar,
+  Pressable,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import BookCollage from "../components/common/BookCollage";
 
-export function LandingScreen() {
+export function LandingScreen({ onLogin }: { onLogin: () => void }) {
   return (
     <View className="flex-1 bg-[#F97316]">
       <StatusBar barStyle="light-content" backgroundColor="#F97316" />
       <SafeAreaView className="flex-1 pt-2 pb-6">
-
         {/* TOP - This is the fix */}
         <View className="items-center justify-center mt-4">
           {/* 1. Badge */}
@@ -31,7 +36,8 @@ export function LandingScreen() {
 
         <View className="px-8 pb-6">
           <Text className="text- text-white text-center leading-6 font-medium opacity-95">
-            Discover captivating stories that transport you to different worlds with every read
+            Discover captivating stories that transport you to different worlds
+            with every read
           </Text>
         </View>
 
@@ -39,7 +45,13 @@ export function LandingScreen() {
           <TouchableOpacity
             className="bg-white py- rounded-xl items-center justify-center flex-row"
             activeOpacity={0.9}
-            style={{ elevation: 4, shadowColor: "#000", shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.15, shadowRadius: 8 }}
+            style={{
+              elevation: 4,
+              shadowColor: "#000",
+              shadowOffset: { width: 0, height: 4 },
+              shadowOpacity: 0.15,
+              shadowRadius: 8,
+            }}
           >
             <Feather name="user-plus" size={30} color="#F97316" />
             <Text className="text-[#F97316] text- font-bold ml-2">Sign up</Text>
@@ -48,16 +60,27 @@ export function LandingScreen() {
           <TouchableOpacity
             className="bg-transparent border-[1.5px] border-white py- rounded-xl items-center justify-center flex-row"
             activeOpacity={0.9}
+            onPress={onLogin}
           >
             <Feather name="log-in" size={29} color="#FFF" />
             <Text className="text-white text- font-bold ml-2">Log in</Text>
           </TouchableOpacity>
 
           <View className="flex-row justify-center items-center mt-2 flex-wrap">
-            <Text className="text-white text- opacity-90">By continuing, you agree to our </Text>
-            <Pressable><Text className="text-white text- underline font-semibold">Terms</Text></Pressable>
+            <Text className="text-white text- opacity-90">
+              By continuing, you agree to our{" "}
+            </Text>
+            <Pressable>
+              <Text className="text-white text- underline font-semibold">
+                Terms
+              </Text>
+            </Pressable>
             <Text className="text-white text- opacity-90"> & </Text>
-            <Pressable><Text className="text-white text- underline font-semibold">Privacy Policy</Text></Pressable>
+            <Pressable>
+              <Text className="text-white text- underline font-semibold">
+                Privacy Policy
+              </Text>
+            </Pressable>
           </View>
         </View>
       </SafeAreaView>
