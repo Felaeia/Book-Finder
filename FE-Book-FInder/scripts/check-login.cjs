@@ -6,7 +6,7 @@ const ts = require('typescript');
 
 const state = [];
 let cursor = 0;
-const native = new Proxy({ StyleSheet: { create: value => value }, Platform: { OS: 'web' } }, {
+const native = new Proxy({ StyleSheet: { create: value => value }, Platform: { OS: 'android' } }, {
   get: (target, name) => target[name] ?? name,
 });
 const moduleMock = { exports: {} };
@@ -16,6 +16,7 @@ const code = ts.transpileModule(fs.readFileSync(`${__dirname}/../src/app/login.t
 vm.runInNewContext(code, {
   exports: moduleMock.exports,
   require: name => {
+    if (name.endsWith('.png')) return 1;
     if (name === 'react') return { useState: initial => {
       const index = cursor++;
       state[index] ??= initial;
@@ -37,6 +38,12 @@ function render() {
   return nodes;
 }
 let nodes = render();
+const login = nodes.find(node => node.type === 'TouchableOpacity');
+assert.equal(login.props.style.backgroundColor, '#FA6326');
+assert.ok(login.props.style.minHeight >= 48);
+const google = nodes.find(node => node.props.source?.uri);
+assert.ok(google.props.source.uri.startsWith('data:image/svg+xml;base64,'));
+assert.ok(Buffer.from(google.props.source.uri.split(',')[1], 'base64').toString().startsWith('<svg'));
 assert.equal(nodes.find(node => node.props.accessibilityLabel === 'Password').props.secureTextEntry, true);
 nodes.find(node => node.props.accessibilityLabel === 'Show password').props.onPress();
 nodes = render();
