@@ -1,14 +1,10 @@
 import "../../global.css";
+import { Href, Redirect } from "expo-router";
 import { useState } from "react";
-import { OpeningScreen } from "../screens/OpeningScreen";
-import { LibraryScreen } from "../screens/LibraryScreen";
-// import { LandingScreen } from "../screens/LandingScreen";
+import { LandingScreen } from "../screens/LandingScreen";
 
 export default function App() {
-  const [showSplash, setShowSplash] = useState(true);
-
-  if (showSplash) {
-    return <OpeningScreen onFinish={() => setShowSplash(false)} />;
-  }
-  return <LibraryScreen></LibraryScreen>;
+  const [enterLibrary, setEnterLibrary] = useState(false);
+  if (enterLibrary) return <Redirect href={"/library" as unknown as Href} />;
+  return <LandingScreen onLogin={() => setEnterLibrary(true)} />;
 }
