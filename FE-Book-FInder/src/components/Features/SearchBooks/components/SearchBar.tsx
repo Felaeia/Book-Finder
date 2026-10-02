@@ -41,7 +41,7 @@ export default function SearchBar({
         value={query}
         onChangeText={setQuery}
         onFocus={() => setIsFocused(true)}
-        onBlur={() => setIsFocused(false)}
+        onBlur={() => setTimeout(() => setIsFocused(false), 150)}
         placeholder="Search for author or book"
         placeholderTextColor={Theme.colors.textMuted}
         autoCapitalize="none"

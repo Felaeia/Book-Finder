@@ -1,7 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
+import { Ionicons } from "@expo/vector-icons";
+import { Href, useFocusEffect, useRouter } from "expo-router";
 import {
   Dimensions,
   FlatList,
+  Pressable,
   RefreshControl,
   SafeAreaView,
   StatusBar,
@@ -33,6 +36,7 @@ import { Colors } from "../theme/colors";
 const { width } = Dimensions.get("window");
 
 export function LibraryScreen() {
+  const router = useRouter();
   const [books, setBooks] = useState<Book[]>([]);
   const [stats, setStats] = useState<LibraryStats>({
     totalBooks: 0,
@@ -66,9 +70,11 @@ export function LibraryScreen() {
     }
   }, []);
 
-  useEffect(() => {
-    loadData();
-  }, [loadData]);
+  useFocusEffect(
+    useCallback(() => {
+      loadData();
+    }, [loadData]),
+  );
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -222,11 +228,17 @@ export function LibraryScreen() {
       <View style={styles.container}>
         {/* App Bar / Header */}
         <View style={styles.header}>
-          <View>
-            <Text style={styles.headerTitle}>My Library</Text>
-            <Text style={styles.headerSubtitle}>
-              Personal Bookshelf & Reading Progress
-            </Text>
+          <View style={styles.headerRow}>
+            <View>
+              <Text style={styles.headerTitle}>My Library</Text>
+              <Text style={styles.headerSubtitle}>
+                Personal Bookshelf & Reading Progress
+              </Text>
+            </View>
+            <Pressable style={styles.discoverButton} onPress={() => router.push("/search" as unknown as Href)} accessibilityRole="button">
+              <Ionicons name="search" size={16} color={Colors.primary} />
+              <Text style={styles.discoverText}>Discover</Text>
+            </Pressable>
           </View>
         </View>
 
@@ -349,6 +361,27 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: 12,
     paddingBottom: 6,
+  },
+  headerRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: 12,
+  },
+  discoverButton: {
+    minHeight: 38,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+    borderWidth: 1,
+    borderColor: Colors.primary,
+    borderRadius: 6,
+    paddingHorizontal: 10,
+  },
+  discoverText: {
+    color: Colors.primary,
+    fontSize: 12,
+    fontWeight: "700",
   },
   headerTitle: {
     fontSize: 26,

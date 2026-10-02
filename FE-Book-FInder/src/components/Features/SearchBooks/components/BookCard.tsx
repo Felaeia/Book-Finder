@@ -1,17 +1,18 @@
 import { Theme } from "@/src/constants/Theme";
 import React from "react";
-import { Image, StyleSheet, View } from "react-native";
+import { Image, Pressable, StyleSheet, View } from "react-native";
 import { Book } from "../lib/types";
 
 type Props = {
   book: Book;
   width?: number;
   height?: number;
+  onPress?: () => void;
 };
 
-export default function BookCard({ book, width = 120, height = 180 }: Props) {
+export default function BookCard({ book, width = 120, height = 180, onPress }: Props) {
   return (
-    <View style={[styles.container, { width, height }]}>
+    <Pressable onPress={onPress} accessibilityRole="button" accessibilityLabel={`View ${book.title}`} style={[styles.container, { width, height }]}>
       {book.coverUrl ? (
         <Image
           source={{ uri: book.coverUrl }}
@@ -21,7 +22,7 @@ export default function BookCard({ book, width = 120, height = 180 }: Props) {
       ) : (
         <View style={styles.placeholder} />
       )}
-    </View>
+    </Pressable>
   );
 }
 
