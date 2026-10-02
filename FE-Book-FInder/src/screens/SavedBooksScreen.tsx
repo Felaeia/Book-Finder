@@ -1,16 +1,13 @@
 import React, { useCallback, useMemo, useState } from "react";
-import { Ionicons } from "@expo/vector-icons";
-import { Href, useFocusEffect, useRouter } from "expo-router";
+import { useFocusEffect } from "expo-router";
 import {
   Dimensions,
   FlatList,
-  Pressable,
   RefreshControl,
-  SafeAreaView,
+  View,
   StatusBar,
   StyleSheet,
   Text,
-  View,
 } from "react-native";
 import { libraryApi } from "../components/Features/SaveBooks/api/libraryApi";
 import { BookGridCard } from "../components/Features/SaveBooks/components/BookCard/BookGridCard";
@@ -32,11 +29,11 @@ import {
   ViewMode,
 } from "../components/Features/SaveBooks/lib/types";
 import { Colors } from "../theme/colors";
+import FloatingTabBar from "../components/common/FloatingTabBar";
 
 const { width } = Dimensions.get("window");
 
 export function LibraryScreen() {
-  const router = useRouter();
   const [books, setBooks] = useState<Book[]>([]);
   const [stats, setStats] = useState<LibraryStats>({
     totalBooks: 0,
@@ -221,7 +218,7 @@ export function LibraryScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <View style={styles.safeArea}>
       <StatusBar barStyle="dark-content" backgroundColor={Colors.background} />
 
       {/* Main Container */}
@@ -235,10 +232,6 @@ export function LibraryScreen() {
                 Personal Bookshelf & Reading Progress
               </Text>
             </View>
-            <Pressable style={styles.discoverButton} onPress={() => router.push("/search" as unknown as Href)} accessibilityRole="button">
-              <Ionicons name="search" size={16} color={Colors.primary} />
-              <Text style={styles.discoverText}>Discover</Text>
-            </Pressable>
           </View>
         </View>
 
@@ -344,7 +337,8 @@ export function LibraryScreen() {
         onToggleFavorite={handleToggleFavorite}
         onRemoveBook={handleRemoveBook}
       />
-    </SafeAreaView>
+      <FloatingTabBar />
+    </View>
   );
 }
 
@@ -368,21 +362,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     gap: 12,
   },
-  discoverButton: {
-    minHeight: 38,
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 6,
-    borderWidth: 1,
-    borderColor: Colors.primary,
-    borderRadius: 6,
-    paddingHorizontal: 10,
-  },
-  discoverText: {
-    color: Colors.primary,
-    fontSize: 12,
-    fontWeight: "700",
-  },
   headerTitle: {
     fontSize: 26,
     fontWeight: "800",
@@ -396,7 +375,7 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   listContent: {
-    paddingBottom: 40,
+    paddingBottom: 100,
   },
   gridColumnWrapper: {
     justifyContent: "space-between",

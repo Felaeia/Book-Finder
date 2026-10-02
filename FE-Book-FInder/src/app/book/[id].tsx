@@ -22,6 +22,7 @@ import {
   OpenLibraryWork,
 } from "../../components/Features/SearchBooks/api/openLibrary";
 import { Theme } from "../../constants/Theme";
+import FloatingTabBar from "../../components/common/FloatingTabBar";
 
 type DetailTab = "Overview" | "Author" | "Reviews";
 
@@ -204,6 +205,7 @@ export default function BookDetailScreen() {
           </ScrollView>
         )}
       </View>
+      <FloatingTabBar />
     </SafeAreaView>
   );
 }
@@ -214,7 +216,7 @@ const styles = StyleSheet.create({
   topBar: { height: 54, paddingHorizontal: 18, flexDirection: "row", alignItems: "center", justifyContent: "space-between" },
   iconButton: { width: 40, height: 40, alignItems: "center", justifyContent: "center" },
   brand: { color: "#D4C8C2", fontSize: 11, fontWeight: "800", letterSpacing: 2 },
-  content: { paddingHorizontal: 20, paddingTop: 16, paddingBottom: 40 },
+  content: { paddingHorizontal: 20, paddingTop: 16, paddingBottom: 100 },
   hero: { flexDirection: "row", gap: 18, alignItems: "center" },
   cover: { width: 122, height: 184, borderRadius: 8, backgroundColor: "#2B2221" },
   coverPlaceholder: { width: 122, height: 184, borderRadius: 8, backgroundColor: "#2B2221", alignItems: "center", justifyContent: "center" },

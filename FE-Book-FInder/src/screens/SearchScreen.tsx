@@ -2,11 +2,11 @@ import { Theme } from "@/src/constants/Theme";
 import { Href, useRouter } from "expo-router";
 import React from "react";
 import { FlatList, ScrollView, StyleSheet, Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import BookCarousel from "../components/Features/SearchBooks/components/BookCarousel";
 import SearchBar from "../components/Features/SearchBooks/components/SearchBar";
 import SearchHeader from "../components/Features/SearchBooks/components/SearchHeader";
 import SubjectGroupCard from "../components/Features/SearchBooks/components/SubjectGroupCard";
+import FloatingTabBar from "../components/common/FloatingTabBar";
 import { useBookSearch } from "../components/Features/SearchBooks/lib/useBookSearch";
 import { useSubjectBooks } from "../components/Features/SearchBooks/lib/useSubjectBooks";
 
@@ -39,7 +39,7 @@ export default function SearchScreen() {
   );
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <View style={styles.safeArea}>
       <ScrollView
         contentContainerStyle={styles.scrollContent}
         keyboardShouldPersistTaps="handled"
@@ -70,7 +70,8 @@ export default function SearchScreen() {
 
         <GroupSection subjects={GROUP_SUBJECTS} />
       </ScrollView>
-    </SafeAreaView>
+      <FloatingTabBar />
+    </View>
   );
 }
 
