@@ -6,7 +6,6 @@ import {
   FlatList,
   Pressable,
   RefreshControl,
-  SafeAreaView,
   StatusBar,
   StyleSheet,
   Text,
@@ -221,7 +220,7 @@ export function LibraryScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <View style={styles.safeArea}>
       <StatusBar barStyle="dark-content" backgroundColor={Colors.background} />
 
       {/* Main Container */}
@@ -235,7 +234,11 @@ export function LibraryScreen() {
                 Personal Bookshelf & Reading Progress
               </Text>
             </View>
-            <Pressable style={styles.discoverButton} onPress={() => router.push("/search" as unknown as Href)} accessibilityRole="button">
+            <Pressable
+              style={styles.discoverButton}
+              onPress={() => router.push("/search" as unknown as Href)}
+              accessibilityRole="button"
+            >
               <Ionicons name="search" size={16} color={Colors.primary} />
               <Text style={styles.discoverText}>Discover</Text>
             </Pressable>
@@ -344,7 +347,7 @@ export function LibraryScreen() {
         onToggleFavorite={handleToggleFavorite}
         onRemoveBook={handleRemoveBook}
       />
-    </SafeAreaView>
+    </View>
   );
 }
 
