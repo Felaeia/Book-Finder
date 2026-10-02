@@ -1,7 +1,6 @@
 import React, { useCallback, useMemo, useState } from "react";
 import { useFocusEffect } from "expo-router";
 import {
-  Dimensions,
   FlatList,
   RefreshControl,
   View,
@@ -30,8 +29,6 @@ import {
 } from "../components/Features/SaveBooks/lib/types";
 import { Colors } from "../theme/colors";
 import FloatingTabBar from "../components/common/FloatingTabBar";
-
-const { width } = Dimensions.get("window");
 
 export function LibraryScreen() {
   const [books, setBooks] = useState<Book[]>([]);

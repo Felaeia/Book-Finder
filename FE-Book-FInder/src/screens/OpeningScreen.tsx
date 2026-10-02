@@ -26,7 +26,7 @@ export function OpeningScreen({ onFinish }: Props) {
         runOnJS(onFinish)();
       }
     });
-  }, []);
+  }, [onFinish, opacity, progress, scale]);
 
   const logoStyle = useAnimatedStyle(() => ({
     transform: [{ scale: scale.value }],
