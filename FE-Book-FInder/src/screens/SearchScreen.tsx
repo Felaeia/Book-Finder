@@ -1,11 +1,12 @@
 import { Theme } from "@/src/constants/Theme";
+import { Href, useRouter } from "expo-router";
 import React from "react";
 import { FlatList, ScrollView, StyleSheet, Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import BookCarousel from "../components/Features/SearchBooks/components/BookCarousel";
 import SearchBar from "../components/Features/SearchBooks/components/SearchBar";
 import SearchHeader from "../components/Features/SearchBooks/components/SearchHeader";
 import SubjectGroupCard from "../components/Features/SearchBooks/components/SubjectGroupCard";
+import FloatingTabBar from "../components/common/FloatingTabBar";
 import { useBookSearch } from "../components/Features/SearchBooks/lib/useBookSearch";
 import { useSubjectBooks } from "../components/Features/SearchBooks/lib/useSubjectBooks";
 
@@ -15,6 +16,7 @@ const GROUP_SUBJECTS = ["Horror", "Romance"];
 const THUMBS_PER_GROUP = 3;
 
 export default function SearchScreen() {
+  const router = useRouter();
   const {
     query,
     setQuery,
@@ -26,13 +28,18 @@ export default function SearchScreen() {
     selectSuggestion,
   } = useBookSearch();
 
+  const openBook = (book: { id: string }) => {
+    const id = book.id.split("/").pop() ?? book.id;
+    router.push({ pathname: "/book/[id]", params: { id } } as unknown as Href);
+  };
+
   const { books: recommended, loading: recommendedLoading } = useSubjectBooks(
     RECOMMENDED_SUBJECT,
     10,
   );
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <View style={styles.safeArea}>
       <ScrollView
         contentContainerStyle={styles.scrollContent}
         keyboardShouldPersistTaps="handled"
@@ -47,7 +54,10 @@ export default function SearchScreen() {
           suggestions={suggestions}
           loading={searchLoading}
           error={searchError}
-          onSelect={selectSuggestion}
+          onSelect={(book) => {
+            openBook(book);
+            selectSuggestion(book);
+          }}
         />
 
         <BookCarousel
@@ -55,11 +65,13 @@ export default function SearchScreen() {
           books={recommended}
           loading={recommendedLoading}
           onSeeAll={() => {}}
+          onBookPress={openBook}
         />
 
         <GroupSection subjects={GROUP_SUBJECTS} />
       </ScrollView>
-    </SafeAreaView>
+      <FloatingTabBar />
+    </View>
   );
 }
 

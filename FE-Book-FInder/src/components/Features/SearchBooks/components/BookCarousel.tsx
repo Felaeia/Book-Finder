@@ -15,6 +15,7 @@ type Props = {
   books: Book[];
   loading?: boolean;
   onSeeAll?: () => void;
+  onBookPress?: (book: Book) => void;
 };
 
 export default function BookCarousel({
@@ -22,6 +23,7 @@ export default function BookCarousel({
   books,
   loading,
   onSeeAll,
+  onBookPress,
 }: Props) {
   return (
     <View style={styles.section}>
@@ -39,7 +41,7 @@ export default function BookCarousel({
         showsHorizontalScrollIndicator={false}
         data={loading ? [] : books}
         keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <BookCard book={item} />}
+        renderItem={({ item }) => <BookCard book={item} onPress={() => onBookPress?.(item)} />}
         contentContainerStyle={styles.list}
       />
     </View>

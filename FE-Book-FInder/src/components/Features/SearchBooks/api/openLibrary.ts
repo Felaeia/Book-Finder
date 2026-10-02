@@ -16,9 +16,26 @@ export type OpenLibraryDoc = {
   key: string;
   title: string;
   author_name?: string[];
+  author_key?: string[];
   cover_i?: number;
   first_publish_year?: number;
   subject?: string[];
+};
+
+export type OpenLibraryWork = {
+  key: string;
+  title: string;
+  description?: string | { value: string };
+  subjects?: string[];
+  authors?: { author: { key: string } }[];
+  first_publish_date?: string;
+  covers?: number[];
+};
+
+export type OpenLibraryAuthor = {
+  name?: string;
+  bio?: string | { value: string };
+  birth_date?: string;
 };
 
 type SearchResponse = {
@@ -60,6 +77,17 @@ export function getBooksBySubject(subject: string, limit = 12): Promise<SubjectW
   const slug = subject.toLowerCase().replace(/\s+/g, '_');
   const url = `${SEARCH_BASE}/subjects/${encodeURIComponent(slug)}.json?limit=${limit}`;
   return request<SubjectResponse>(url).then((res) => res.works ?? []);
+}
+
+/** Work API — provides the description and metadata for a selected book. */
+export function getWorkDetails(workId: string): Promise<OpenLibraryWork> {
+  return request<OpenLibraryWork>(`${SEARCH_BASE}/works/${encodeURIComponent(workId)}.json`);
+}
+
+/** Author API — provides author biography data for a selected book. */
+export function getAuthorDetails(authorKey: string): Promise<OpenLibraryAuthor> {
+  const authorId = authorKey.split('/').pop();
+  return request<OpenLibraryAuthor>(`${SEARCH_BASE}/authors/${encodeURIComponent(authorId ?? authorKey)}.json`);
 }
 
 /**

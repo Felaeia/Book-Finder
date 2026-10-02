@@ -11,7 +11,6 @@ export default function SearchHeader({ userName, avatarUrl }: Props) {
   return (
     <>
       <View style={styles.header}>
-        <Text style={styles.menuIcon}>☰</Text>
         <Text style={styles.logo}>📖 BookFinder</Text>
         {avatarUrl ? (
           <Image source={{ uri: avatarUrl }} style={styles.avatar} />
@@ -34,7 +33,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginVertical: 20,
   },
-  menuIcon: { color: Theme.colors.textPrimary, fontSize: 24 },
   logo: { color: Theme.colors.accent, fontSize: 20, fontWeight: 'bold' },
   avatar: { width: 40, height: 40, borderRadius: 20, backgroundColor: Theme.colors.surface },
   welcomeText: {
