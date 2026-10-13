@@ -1,11 +1,9 @@
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import React, { useCallback, useMemo, useState } from "react";
+import { useFocusEffect } from "expo-router";
 import {
-  StyleSheet,
-  View,
-  Text,
+  Dimensions,
   FlatList,
   RefreshControl,
-  SafeAreaView,
   StatusBar,
   Dimensions,
   TouchableOpacity,
@@ -22,6 +20,7 @@ import { BookGridCard } from "../components/FEATURES/LIBRARY/components/BookCard
 import { ProgressModal } from "../components/FEATURES/LIBRARY/components/ProgressModal";
 import { EmptyShelfState } from "../components/FEATURES/LIBRARY/components/EmptyShelfState";
 import { Colors } from "../theme/colors";
+import FloatingTabBar from "../components/common/FloatingTabBar";
 
 const { width } = Dimensions.get("window");
 
@@ -62,9 +61,11 @@ export function LibraryScreen() {
     }
   }, []);
 
-  useEffect(() => {
-    loadData();
-  }, [loadData]);
+  useFocusEffect(
+    useCallback(() => {
+      loadData();
+    }, [loadData]),
+  );
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -112,7 +113,10 @@ export function LibraryScreen() {
     }
   };
 
-  const handleUpdateShelf = async (bookId: string, newShelf: Exclude<ShelfType, "all">) => {
+  const handleUpdateShelf = async (
+    bookId: string,
+    newShelf: Exclude<ShelfType, "all">,
+  ) => {
     try {
       const updated = await libraryApi.updateShelf(bookId, newShelf);
       setBooks((prev) => prev.map((b) => (b.id === bookId ? updated : b)));
@@ -242,10 +246,10 @@ export function LibraryScreen() {
             />
           )}
           ListEmptyComponent={
-            <EmptyShelfState
+            < EmptyShelfState
               shelf={activeShelf}
               isSearching={false}
-              onResetSearch={() => {}}
+              onResetSearch={() => { }}
               onExploreBooks={() => setActiveShelf("all")}
             />
           }
@@ -279,10 +283,10 @@ export function LibraryScreen() {
             </TouchableOpacity>
           </View>
         </View>
-      </View>
+      </View >
 
       {/* Book Detail & Progress Modal */}
-      <ProgressModal
+      < ProgressModal
         book={selectedBook}
         visible={progressModalVisible}
         onClose={() => {
@@ -295,7 +299,8 @@ export function LibraryScreen() {
         onToggleFavorite={handleToggleFavorite}
         onRemoveBook={handleRemoveBook}
       />
-    </SafeAreaView>
+      <FloatingTabBar />
+    </View >
   );
 }
 

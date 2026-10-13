@@ -46,7 +46,10 @@ export function OpeningScreen({ onFinish }: Props) {
       <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
 
       {/* Soft orange glow */}
-      <View className="absolute w- h- rounded-full bg-[#F97316]/15" style={{ top: '32%' }} />
+      <View
+        className="absolute w- h- rounded-full bg-[#F97316]/15"
+        style={{ top: "32%" }}
+      />
 
       <View className="items-center">
         <Animated.View style={logoStyle}>
