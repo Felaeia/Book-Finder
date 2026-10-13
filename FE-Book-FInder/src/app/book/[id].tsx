@@ -1,12 +1,13 @@
 import React from "react";
 import { useLocalSearchParams } from "expo-router";
 import { BookDetailScreen } from "../../screens/BookDetailScreen";
-import { INITIAL_BOOKS } from "../../components/FEATURES/LIBRARY/lib/mockData";
+import { INITIAL_BOOKS } from "../../components/Features/SaveBooks/lib/mockData";
+import { Book } from "../../components/Features/SaveBooks/lib/types";
 
 export default function BookDetailPage() {
   const { id } = useLocalSearchParams<{ id: string }>();
 
-  const book = INITIAL_BOOKS.find((b) => b.id === id) || INITIAL_BOOKS.find((b) => b.id === "7") || INITIAL_BOOKS[0];
+  const book: Book = INITIAL_BOOKS.find((b: Book) => b.id === id) || INITIAL_BOOKS.find((b: Book) => b.id === "7") || INITIAL_BOOKS[0];
 
   return <BookDetailScreen book={book} />;
 }

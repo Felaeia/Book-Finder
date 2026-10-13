@@ -3,7 +3,11 @@ import { View, Text, TouchableOpacity, StatusBar, Pressable } from "react-native
 import { SafeAreaView } from "react-native-safe-area-context";
 import BookCollage from "../components/common/BookCollage";
 
-export function LandingScreen() {
+interface LandingScreenProps {
+  onLogin?: () => void;
+}
+
+export function LandingScreen({ onLogin }: LandingScreenProps) {
   return (
     <View className="flex-1 bg-[#F97316]">
       <StatusBar barStyle="light-content" backgroundColor="#F97316" />
@@ -48,6 +52,7 @@ export function LandingScreen() {
           <TouchableOpacity
             className="bg-transparent border-[1.5px] border-white py- rounded-xl items-center justify-center flex-row"
             activeOpacity={0.9}
+            onPress={onLogin}
           >
             <Feather name="log-in" size={29} color="#FFF" />
             <Text className="text-white text- font-bold ml-2">Log in</Text>

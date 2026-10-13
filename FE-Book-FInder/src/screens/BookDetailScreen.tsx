@@ -15,7 +15,7 @@ import {
 import { Image } from "expo-image";
 import { Feather, FontAwesome, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import { Book } from "../components/FEATURES/LIBRARY/lib/types";
+import { Book } from "../components/Features/SaveBooks/lib/types";
 
 const { width } = Dimensions.get("window");
 
