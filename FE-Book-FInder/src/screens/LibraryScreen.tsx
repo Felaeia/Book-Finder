@@ -8,15 +8,17 @@ import {
   SafeAreaView,
   StatusBar,
   Dimensions,
+  TouchableOpacity,
 } from "react-native";
-import { Book, ShelfType, SortOption, ViewMode, LibraryStats } from "../components/FEATURES/LIBRARY/lib/types";
+import { Image } from "expo-image";
+import { Feather, FontAwesome, Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
+import { Book, ShelfType, LibraryStats } from "../components/FEATURES/LIBRARY/lib/types";
+import { INITIAL_BOOKS } from "../components/FEATURES/LIBRARY/lib/mockData";
 import { libraryApi } from "../components/FEATURES/LIBRARY/api/libraryApi";
 import { ShelfTabBar, ShelfTab } from "../components/FEATURES/LIBRARY/components/ShelfTabBar";
 import { ShelfStatsHeader } from "../components/FEATURES/LIBRARY/components/ShelfStatsHeader";
 import { BookGridCard } from "../components/FEATURES/LIBRARY/components/BookCard/BookGridCard";
-import { BookListCard } from "../components/FEATURES/LIBRARY/components/BookCard/BookListCard";
-import { SearchBar } from "../components/FEATURES/LIBRARY/components/SearchBar";
-import { FilterSortModal } from "../components/FEATURES/LIBRARY/components/FilterSortModal";
 import { ProgressModal } from "../components/FEATURES/LIBRARY/components/ProgressModal";
 import { EmptyShelfState } from "../components/FEATURES/LIBRARY/components/EmptyShelfState";
 import { Colors } from "../theme/colors";
@@ -24,23 +26,26 @@ import { Colors } from "../theme/colors";
 const { width } = Dimensions.get("window");
 
 export function LibraryScreen() {
-  const [books, setBooks] = useState<Book[]>([]);
+  const router = useRouter();
+
+  const [books, setBooks] = useState<Book[]>(INITIAL_BOOKS);
   const [stats, setStats] = useState<LibraryStats>({
-    totalBooks: 0,
-    booksReading: 0,
-    booksWantToRead: 0,
+    shelved: 10,
+    favorites: 7,
+    bookmarks: 7,
+    wantToRead: 7,
+    totalBooks: 10,
+    booksReading: 7,
+    booksWantToRead: 7,
     booksCompleted: 0,
-    booksFavorites: 0,
-    pagesRead: 0,
+    booksFavorites: 7,
+    pagesRead: 1420,
   });
+
   const [activeShelf, setActiveShelf] = useState<ShelfType>("all");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [viewMode, setViewMode] = useState<ViewMode>("grid");
-  const [sortOption, setSortOption] = useState<SortOption>("recent");
   const [refreshing, setRefreshing] = useState(false);
 
-  // Modals
-  const [filterSortModalVisible, setFilterSortModalVisible] = useState(false);
+  // Modals & Active selection
   const [progressModalVisible, setProgressModalVisible] = useState(false);
   const [selectedBook, setSelectedBook] = useState<Book | null>(null);
 
@@ -67,58 +72,30 @@ export function LibraryScreen() {
     setRefreshing(false);
   };
 
-  // Shelf tabs configuration
+  // Shelf tabs configuration matching Figma design
   const shelfTabs: ShelfTab[] = useMemo(() => {
     return [
-      { key: "all", label: "All Books", count: stats.totalBooks },
-      { key: "reading", label: "Reading", count: stats.booksReading },
-      { key: "want_to_read", label: "Want to Read", count: stats.booksWantToRead },
-      { key: "completed", label: "Finished", count: stats.booksCompleted },
-      { key: "favorites", label: "Favorites", count: stats.booksFavorites },
+      { key: "all", label: "My Books" },
+      { key: "favorites", label: "Favorites" },
+      { key: "bookmarks", label: "Bookmarks" },
+      { key: "want_to_read", label: "Want to read" },
     ];
-  }, [stats]);
+  }, []);
 
-  // Filter & Sort Logic
-  const filteredAndSortedBooks = useMemo(() => {
+  // Filter books based on active tab
+  const filteredBooks = useMemo(() => {
     let result = [...books];
 
-    // Filter by Shelf
     if (activeShelf === "favorites") {
       result = result.filter((b) => b.isFavorite);
-    } else if (activeShelf !== "all") {
-      result = result.filter((b) => b.shelf === activeShelf);
+    } else if (activeShelf === "bookmarks") {
+      result = result.filter((b) => b.isBookmarked);
+    } else if (activeShelf === "want_to_read") {
+      result = result.filter((b) => b.shelf === "want_to_read");
     }
-
-    // Filter by Search Query
-    if (searchQuery.trim()) {
-      const q = searchQuery.toLowerCase().trim();
-      result = result.filter(
-        (b) => b.title.toLowerCase().includes(q) || b.author.toLowerCase().includes(q)
-      );
-    }
-
-    // Sort
-    result.sort((a, b) => {
-      switch (sortOption) {
-        case "title":
-          return a.title.localeCompare(b.title);
-        case "author":
-          return a.author.localeCompare(b.author);
-        case "rating":
-          return b.rating - a.rating;
-        case "progress": {
-          const progA = a.totalPages > 0 ? a.currentPage / a.totalPages : 0;
-          const progB = b.totalPages > 0 ? b.currentPage / b.totalPages : 0;
-          return progB - progA;
-        }
-        case "recent":
-        default:
-          return new Date(b.dateAdded).getTime() - new Date(a.dateAdded).getTime();
-      }
-    });
 
     return result;
-  }, [books, activeShelf, searchQuery, sortOption]);
+  }, [books, activeShelf]);
 
   // Handlers
   const handleToggleFavorite = async (bookId: string) => {
@@ -190,32 +167,24 @@ export function LibraryScreen() {
   };
 
   const handleOpenBookModal = (book: Book) => {
-    setSelectedBook(book);
-    setProgressModalVisible(true);
+    router.push(`/book/${book.id}` as any);
   };
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <StatusBar barStyle="dark-content" backgroundColor={Colors.background} />
+      <StatusBar barStyle="light-content" backgroundColor="#121214" />
 
       {/* Main Container */}
       <View style={styles.container}>
-        {/* App Bar / Header */}
-        <View style={styles.header}>
-          <View>
-            <Text style={styles.headerTitle}>My Library</Text>
-            <Text style={styles.headerSubtitle}>Personal Bookshelf & Reading Progress</Text>
-          </View>
-        </View>
-
-        {/* Shelved Books List */}
+        {/* FlatList with complete header elements */}
         <FlatList
-          data={filteredAndSortedBooks}
-          key={viewMode === "grid" ? "grid-view" : "list-view"}
-          numColumns={viewMode === "grid" ? 2 : 1}
+          data={filteredBooks}
+          key="grid-view"
+          numColumns={2}
           keyExtractor={(item) => item.id}
           contentContainerStyle={styles.listContent}
-          columnWrapperStyle={viewMode === "grid" ? styles.gridColumnWrapper : undefined}
+          columnWrapperStyle={styles.gridColumnWrapper}
+          showsVerticalScrollIndicator={false}
           refreshControl={
             <RefreshControl
               refreshing={refreshing}
@@ -225,72 +194,92 @@ export function LibraryScreen() {
           }
           ListHeaderComponent={
             <View>
-              {/* Library Summary Stats */}
+              {/* Top Navigation Row: Logo + User Avatar */}
+              <View style={styles.topBar}>
+                {/* Book Logo Icon */}
+                <View style={styles.logoWrapper}>
+                  <Ionicons name="book" size={32} color="#EA580C" />
+                </View>
+
+                {/* Profile Avatar */}
+                <Image
+                  source={{
+                    uri: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200",
+                  }}
+                  style={styles.avatar}
+                  contentFit="cover"
+                />
+              </View>
+
+              {/* Screen Title */}
+              <View style={styles.titleWrapper}>
+                <Text style={styles.screenTitle}>My{"\n"}Library</Text>
+              </View>
+
+              {/* Shelved Stats Card */}
               <ShelfStatsHeader stats={stats} />
 
-              {/* Shelf Filter Tabs */}
+              {/* Shelf Filter Pill Tabs */}
               <ShelfTabBar
                 activeTab={activeShelf}
                 tabs={shelfTabs}
                 onSelectTab={setActiveShelf}
               />
 
-              {/* Search, Filter & Layout Controls */}
-              <SearchBar
-                value={searchQuery}
-                onChangeText={setSearchQuery}
-                viewMode={viewMode}
-                onToggleViewMode={() => setViewMode(viewMode === "grid" ? "list" : "grid")}
-                currentSort={sortOption}
-                onOpenFilterSort={() => setFilterSortModalVisible(true)}
-              />
-
-              {/* Filter feedback row */}
-              <View style={styles.resultsBar}>
-                <Text style={styles.resultsCount}>
-                  {filteredAndSortedBooks.length}{" "}
-                  {filteredAndSortedBooks.length === 1 ? "book" : "books"} found
-                </Text>
-                <Text style={styles.activeSortBadge}>
-                  Sort: {sortOption.replace("_", " ")}
+              {/* Result Count Feedback */}
+              <View style={styles.countWrapper}>
+                <Text style={styles.countText}>
+                  {filteredBooks.length} {filteredBooks.length === 1 ? "book" : "books"} found
                 </Text>
               </View>
             </View>
           }
-          renderItem={({ item }) =>
-            viewMode === "grid" ? (
-              <BookGridCard
-                book={item}
-                onPress={handleOpenBookModal}
-                onToggleFavorite={handleToggleFavorite}
-              />
-            ) : (
-              <BookListCard
-                book={item}
-                onPress={handleOpenBookModal}
-                onToggleFavorite={handleToggleFavorite}
-                onOpenShelfAction={handleOpenBookModal}
-              />
-            )
-          }
+          renderItem={({ item }) => (
+            <BookGridCard
+              book={item}
+              onPress={handleOpenBookModal}
+              onToggleFavorite={handleToggleFavorite}
+            />
+          )}
           ListEmptyComponent={
             <EmptyShelfState
               shelf={activeShelf}
-              isSearching={searchQuery.length > 0}
-              onResetSearch={() => setSearchQuery("")}
+              isSearching={false}
+              onResetSearch={() => {}}
               onExploreBooks={() => setActiveShelf("all")}
             />
           }
         />
-      </View>
 
-      {/* Sort & Filter Modal */}
-      <FilterSortModal
-        visible={filterSortModalVisible}
-        onClose={() => setFilterSortModalVisible(false)}
-        currentSort={sortOption}
-        onSelectSort={setSortOption}
-      />
+        {/* Floating Bottom Navigation Bar */}
+        <View style={styles.floatingBarWrapper} pointerEvents="box-none">
+          <View style={styles.floatingBar}>
+            <TouchableOpacity
+              activeOpacity={0.7}
+              onPress={() => router.push("/")}
+              style={styles.navButton}
+            >
+              <Feather name="home" size={24} color="#FFFFFF" />
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              activeOpacity={0.7}
+              onPress={() => setActiveShelf("all")}
+              style={styles.navButton}
+            >
+              <Feather name="compass" size={25} color="#FFFFFF" />
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              activeOpacity={0.7}
+              onPress={() => setActiveShelf("bookmarks")}
+              style={styles.navButton}
+            >
+              <FontAwesome name="bookmark" size={22} color="#FFFFFF" />
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
 
       {/* Book Detail & Progress Modal */}
       <ProgressModal
@@ -313,57 +302,89 @@ export function LibraryScreen() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: Colors.background,
+    backgroundColor: "#121214",
   },
   container: {
     flex: 1,
-    backgroundColor: Colors.background,
+    backgroundColor: "#121214",
   },
-  header: {
+  topBar: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     paddingHorizontal: 16,
     paddingTop: 12,
-    paddingBottom: 6,
+    paddingBottom: 4,
   },
-  headerTitle: {
-    fontSize: 26,
+  logoWrapper: {
+    width: 44,
+    height: 44,
+    justifyContent: "center",
+    alignItems: "flex-start",
+  },
+  avatar: {
+    width: 42,
+    height: 42,
+    borderRadius: 12,
+    borderWidth: 2,
+    borderColor: "#EA580C",
+    backgroundColor: "#27272A",
+  },
+  titleWrapper: {
+    paddingHorizontal: 16,
+    marginTop: 14,
+    marginBottom: 4,
+  },
+  screenTitle: {
+    fontSize: 40,
     fontWeight: "800",
-    color: Colors.text,
-    letterSpacing: -0.5,
+    color: "#FFFFFF",
+    lineHeight: 44,
+    letterSpacing: -1,
   },
-  headerSubtitle: {
-    fontSize: 13,
-    color: Colors.textSecondary,
+  countWrapper: {
+    paddingHorizontal: 16,
+    marginTop: 14,
+    marginBottom: 10,
+  },
+  countText: {
+    fontSize: 14,
+    color: "#9CA3AF",
     fontWeight: "500",
-    marginTop: 2,
   },
   listContent: {
-    paddingBottom: 40,
+    paddingBottom: 110, // Extra space for floating bottom bar
   },
   gridColumnWrapper: {
     justifyContent: "space-between",
     paddingHorizontal: 16,
   },
-  resultsBar: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+  floatingBarWrapper: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    bottom: 24,
     alignItems: "center",
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    marginBottom: 4,
+    justifyContent: "center",
   },
-  resultsCount: {
-    fontSize: 12,
-    color: Colors.textSecondary,
-    fontWeight: "600",
+  floatingBar: {
+    flexDirection: "row",
+    backgroundColor: "#EA580C",
+    width: 240,
+    height: 56,
+    borderRadius: 28,
+    alignItems: "center",
+    justifyContent: "space-around",
+    paddingHorizontal: 20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.35,
+    shadowRadius: 10,
+    elevation: 8,
   },
-  activeSortBadge: {
-    fontSize: 11,
-    color: Colors.primary,
-    backgroundColor: Colors.primaryLight,
-    paddingHorizontal: 8,
-    paddingVertical: 3,
-    borderRadius: 6,
-    fontWeight: "600",
-    textTransform: "capitalize",
+  navButton: {
+    padding: 8,
+    alignItems: "center",
+    justifyContent: "center",
   },
 });

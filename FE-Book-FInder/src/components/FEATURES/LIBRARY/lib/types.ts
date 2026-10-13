@@ -1,4 +1,10 @@
-export type ShelfType = "all" | "reading" | "want_to_read" | "completed" | "favorites";
+export type ShelfType =
+  | "all"
+  | "favorites"
+  | "bookmarks"
+  | "want_to_read"
+  | "reading"
+  | "completed";
 
 export type SortOption = "recent" | "title" | "author" | "rating" | "progress";
 
@@ -17,13 +23,26 @@ export interface Book {
   genre: string;
   description?: string;
   isFavorite?: boolean;
+  isBookmarked?: boolean;
+  series?: string;
+  edition?: string;
+  publishedDate?: string;
+  publisher?: string;
+  ratingsCount?: string;
+  reviewsCount?: string;
+  authorPhotoUrl?: string;
+  authorBio?: string;
 }
 
 export interface LibraryStats {
-  totalBooks: number;
-  booksReading: number;
-  booksWantToRead: number;
-  booksCompleted: number;
-  booksFavorites: number;
-  pagesRead: number;
+  shelved: number;
+  favorites: number;
+  bookmarks: number;
+  wantToRead: number;
+  totalBooks?: number;
+  booksReading?: number;
+  booksWantToRead?: number;
+  booksCompleted?: number;
+  booksFavorites?: number;
+  pagesRead?: number;
 }

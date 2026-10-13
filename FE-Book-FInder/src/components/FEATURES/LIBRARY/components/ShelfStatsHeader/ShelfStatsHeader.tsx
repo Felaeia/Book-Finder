@@ -11,28 +11,42 @@ export function ShelfStatsHeader({ stats }: ShelfStatsHeaderProps) {
   return (
     <View style={styles.container}>
       <View style={styles.card}>
+        {/* Column 1: Shelved */}
         <View style={styles.statItem}>
-          <Text style={styles.statValue}>{stats.totalBooks}</Text>
+          <Text style={[styles.statValue, { color: Colors.statShelved }]}>
+            {stats.shelved ?? stats.totalBooks ?? 10}
+          </Text>
           <Text style={styles.statLabel}>Shelved</Text>
         </View>
+
         <View style={styles.divider} />
+
+        {/* Column 2: Favorites */}
         <View style={styles.statItem}>
-          <Text style={[styles.statValue, { color: Colors.shelves.reading.text }]}>
-            {stats.booksReading}
+          <Text style={[styles.statValue, { color: Colors.statFavorites }]}>
+            {stats.favorites ?? 7}
           </Text>
-          <Text style={styles.statLabel}>Reading</Text>
+          <Text style={styles.statLabel}>Favorites</Text>
         </View>
+
         <View style={styles.divider} />
+
+        {/* Column 3: Bookmarks */}
         <View style={styles.statItem}>
-          <Text style={[styles.statValue, { color: Colors.shelves.completed.text }]}>
-            {stats.booksCompleted}
+          <Text style={[styles.statValue, { color: Colors.statBookmarks }]}>
+            {stats.bookmarks ?? 7}
           </Text>
-          <Text style={styles.statLabel}>Completed</Text>
+          <Text style={styles.statLabel}>Bookmarks</Text>
         </View>
+
         <View style={styles.divider} />
+
+        {/* Column 4: Want to read */}
         <View style={styles.statItem}>
-          <Text style={[styles.statValue, { color: Colors.primary }]}>{stats.pagesRead}</Text>
-          <Text style={styles.statLabel}>Pages Read</Text>
+          <Text style={[styles.statValue, { color: Colors.statWantToRead }]}>
+            {stats.wantToRead ?? 7}
+          </Text>
+          <Text style={styles.statLabel}>Want to read</Text>
         </View>
       </View>
     </View>
@@ -42,43 +56,42 @@ export function ShelfStatsHeader({ stats }: ShelfStatsHeaderProps) {
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 16,
-    paddingTop: 8,
-    paddingBottom: 4,
+    marginTop: 18,
+    marginBottom: 6,
   },
   card: {
-    backgroundColor: Colors.card,
-    borderRadius: 16,
+    backgroundColor: "#FFFFFF",
+    borderRadius: 18,
     paddingVertical: 14,
-    paddingHorizontal: 12,
+    paddingHorizontal: 6,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    borderWidth: 1,
-    borderColor: Colors.border,
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.04,
-    shadowRadius: 8,
-    elevation: 2,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.12,
+    shadowRadius: 10,
+    elevation: 3,
   },
   statItem: {
     flex: 1,
     alignItems: "center",
+    justifyContent: "center",
   },
   statValue: {
-    fontSize: 18,
-    fontWeight: "700",
-    color: Colors.text,
+    fontSize: 22,
+    fontWeight: "800",
+    letterSpacing: -0.5,
   },
   statLabel: {
     fontSize: 11,
-    color: Colors.textSecondary,
-    marginTop: 2,
+    color: "#6B7280",
+    marginTop: 3,
     fontWeight: "500",
   },
   divider: {
     width: 1,
-    height: 24,
-    backgroundColor: Colors.border,
+    height: 28,
+    backgroundColor: "#FDBA74",
   },
 });

@@ -1,9 +1,12 @@
 import { Feather } from "@expo/vector-icons";
 import { View, Text, TouchableOpacity, StatusBar, Pressable } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useRouter } from "expo-router";
 import BookCollage from "../components/common/BookCollage";
 
 export function LandingScreen() {
+  const router = useRouter();
+
   return (
     <View className="flex-1 bg-[#F97316]">
       <StatusBar barStyle="light-content" backgroundColor="#F97316" />
@@ -37,20 +40,22 @@ export function LandingScreen() {
 
         <View className="px-6 gap-3.5">
           <TouchableOpacity
-            className="bg-white py- rounded-xl items-center justify-center flex-row"
+            onPress={() => router.push("/library")}
+            className="bg-white py-3.5 rounded-xl items-center justify-center flex-row"
             activeOpacity={0.9}
             style={{ elevation: 4, shadowColor: "#000", shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.15, shadowRadius: 8 }}
           >
-            <Feather name="user-plus" size={30} color="#F97316" />
-            <Text className="text-[#F97316] text- font-bold ml-2">Sign up</Text>
+            <Feather name="user-plus" size={20} color="#F97316" />
+            <Text className="text-[#F97316] text-base font-bold ml-2">Sign up</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
-            className="bg-transparent border-[1.5px] border-white py- rounded-xl items-center justify-center flex-row"
+            onPress={() => router.push("/library")}
+            className="bg-transparent border-[1.5px] border-white py-3.5 rounded-xl items-center justify-center flex-row"
             activeOpacity={0.9}
           >
-            <Feather name="log-in" size={29} color="#FFF" />
-            <Text className="text-white text- font-bold ml-2">Log in</Text>
+            <Feather name="log-in" size={20} color="#FFF" />
+            <Text className="text-white text-base font-bold ml-2">Log in</Text>
           </TouchableOpacity>
 
           <View className="flex-row justify-center items-center mt-2 flex-wrap">
