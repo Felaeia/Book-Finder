@@ -340,36 +340,36 @@ export function LibraryScreen() {
         }
       />
 
-      {/* Bottom Nav — matches BookDetailScreen */}
+      {/* Bottom Nav — Saved Active */}
       <View style={styles.bottomNavContainer}>
         {[
-          { icon: "home-outline", label: "Home", route: "/library", key: "home" },
           { icon: "compass-outline", label: "Discover", route: "/search", key: "discover" },
-          { icon: "search-outline", label: "Search", route: "/search", key: "search" },
           { icon: "bookmark-outline", label: "Saved", route: "/saved", key: "saved" },
-          { icon: "menu-outline", label: "More", route: null, key: "more" },
-        ].map((item) => (
-          <TouchableOpacity
-            key={item.key}
-            style={[styles.bottomNavItem, item.key === "home" && styles.activeSearchPill]}
-            onPress={() => item.route && router.push(item.route as any)}
-            activeOpacity={0.7}
-          >
-            <Ionicons
-              name={item.icon as any}
-              size={22}
-              color={item.key === "home" ? "#422515" : "#554438"}
-            />
-            <Text
-              style={[
-                styles.bottomNavLabel,
-                item.key === "home" && { fontWeight: "800", color: "#422515" },
-              ]}
+        ].map((item) => {
+          const isActive = item.key === "saved";
+          return (
+            <TouchableOpacity
+              key={item.key}
+              style={[styles.bottomNavItem, isActive && styles.activeSearchPill]}
+              onPress={() => item.route && router.push(item.route as any)}
+              activeOpacity={0.7}
             >
-              {item.label}
-            </Text>
-          </TouchableOpacity>
-        ))}
+              <Ionicons
+                name={item.icon as any}
+                size={22}
+                color={isActive ? "#422515" : "#554438"}
+              />
+              <Text
+                style={[
+                  styles.bottomNavLabel,
+                  isActive && { fontWeight: "800", color: "#422515" },
+                ]}
+              >
+                {item.label}
+              </Text>
+            </TouchableOpacity>
+          );
+        })}
       </View>
 
       <ProgressModal

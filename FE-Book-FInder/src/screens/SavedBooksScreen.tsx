@@ -198,42 +198,40 @@ export function LibraryScreen() {
   const readPct = (book: Book) =>
     book.totalPages > 0 ? Math.round((book.currentPage / book.totalPages) * 100) : 0;
 
-  // ── Book row (list mode) ─────────────────────────────────────────────────
+  // ── Book row (list mode) — matches SearchScreen card design ────────────────
   const renderListItem = ({ item }: { item: Book }) => (
     <TouchableOpacity
-      style={styles.bookRow}
+      style={styles.bookCard}
       activeOpacity={0.85}
-      onPress={() => handleOpenBookModal(item)}
+      onPress={() => router.push({ pathname: "/book/[id]", params: { id: item.id } } as any)}
     >
-      <View style={styles.bookRowCoverShadow}>
-        <Image
-          source={{ uri: item.coverUrl }}
-          style={styles.bookRowCover}
-          contentFit="cover"
-          transition={200}
-        />
-      </View>
+      <Image
+        source={{ uri: item.coverUrl }}
+        style={styles.bookCover}
+        contentFit="cover"
+        transition={200}
+      />
 
-      <View style={styles.bookRowInfo}>
-        <Text style={styles.bookRowTitle} numberOfLines={2}>{item.title}</Text>
-        <Text style={styles.bookRowAuthor} numberOfLines={1}>by {item.author}</Text>
+      <View style={styles.bookInfo}>
+        <Text style={styles.bookTitle} numberOfLines={2}>{item.title}</Text>
+        <Text style={styles.bookAuthor} numberOfLines={1}>by {item.author}</Text>
 
         {/* Stars */}
         <View style={styles.starsRow}>
           {[1, 2, 3, 4, 5].map((s) => (
             <FontAwesome
               key={s}
-              name={s <= (item.rating ?? 0) ? "star" : "star-o"}
-              size={11}
+              name={s <= Math.floor(item.rating ?? 0) ? "star" : s - (item.rating ?? 0) <= 0.5 ? "star-half-empty" : "star-o"}
+              size={13}
               color="#EA580C"
-              style={{ marginRight: 1 }}
+              style={{ marginRight: 2 }}
             />
           ))}
         </View>
 
         {/* Shelf badge */}
-        <View style={[styles.shelfBadge, shelfBadgeBg(item.shelf)]}>
-          <Text style={[styles.shelfBadgeText, shelfBadgeFg(item.shelf)]}>
+        <View style={[styles.badgePill, shelfBadgeBg(item.shelf)]}>
+          <Text style={[styles.badgeText, shelfBadgeFg(item.shelf)]}>
             {shelfLabel(item.shelf)}
           </Text>
         </View>
@@ -250,8 +248,9 @@ export function LibraryScreen() {
       </View>
 
       {/* Actions */}
-      <View style={styles.rowActions}>
+      <View style={styles.cardActions}>
         <TouchableOpacity
+          style={styles.actionBtn}
           onPress={() => handleToggleFavorite(item.id)}
           hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
         >
@@ -262,11 +261,11 @@ export function LibraryScreen() {
           />
         </TouchableOpacity>
         <TouchableOpacity
+          style={styles.actionBtn}
           onPress={() => handleOpenBookModal(item)}
           hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-          style={{ marginTop: 10 }}
         >
-          <Feather name="more-vertical" size={18} color="#8D7E73" />
+          <MaterialCommunityIcons name="dots-vertical" size={20} color="#8D7E73" />
         </TouchableOpacity>
       </View>
     </TouchableOpacity>
@@ -277,12 +276,12 @@ export function LibraryScreen() {
     <TouchableOpacity
       style={styles.gridCard}
       activeOpacity={0.85}
-      onPress={() => handleOpenBookModal(item)}
+      onPress={() => router.push({ pathname: "/book/[id]", params: { id: item.id } } as any)}
     >
-      <View style={styles.gridCoverShadow}>
+      <View style={styles.gridCoverWrapper}>
         <Image
           source={{ uri: item.coverUrl }}
-          style={styles.gridCover}
+          style={styles.gridCoverImg}
           contentFit="cover"
           transition={200}
         />
@@ -294,15 +293,26 @@ export function LibraryScreen() {
           <Ionicons
             name={item.isFavorite ? "heart" : "heart-outline"}
             size={18}
-            color={item.isFavorite ? "#C0392B" : "rgba(255,255,255,0.85)"}
+            color={item.isFavorite ? "#C0392B" : "#8D7E73"}
           />
         </TouchableOpacity>
       </View>
       <View style={styles.gridInfo}>
         <Text style={styles.gridTitle} numberOfLines={2}>{item.title}</Text>
         <Text style={styles.gridAuthor} numberOfLines={1}>{item.author}</Text>
-        <View style={[styles.shelfBadge, shelfBadgeBg(item.shelf), { marginTop: 6 }]}>
-          <Text style={[styles.shelfBadgeText, shelfBadgeFg(item.shelf)]}>
+        <View style={styles.gridStarsRow}>
+          {[1, 2, 3, 4, 5].map((s) => (
+            <FontAwesome
+              key={s}
+              name={s <= Math.floor(item.rating ?? 0) ? "star" : "star-o"}
+              size={11}
+              color="#EA580C"
+              style={{ marginRight: 1 }}
+            />
+          ))}
+        </View>
+        <View style={[styles.badgePill, shelfBadgeBg(item.shelf), { marginTop: 4, alignSelf: "flex-start" }]}>
+          <Text style={[styles.badgeText, shelfBadgeFg(item.shelf), { fontSize: 10 }]}>
             {shelfLabel(item.shelf)}
           </Text>
         </View>
@@ -468,14 +478,11 @@ export function LibraryScreen() {
         }
       />
 
-      {/* ── Bottom Nav — matches BookDetailScreen exactly ── */}
+      {/* ── Bottom Nav — Saved Active ── */}
       <View style={styles.bottomNavContainer}>
         {[
-          { icon: "home-outline",     label: "Home",     key: "home",     route: null },
           { icon: "compass-outline",  label: "Discover", key: "discover", route: "/search" },
-          { icon: "search-outline",   label: "Search",   key: "search",   route: "/search" },
           { icon: "bookmark-outline", label: "Saved",    key: "saved",    route: "/saved" },
-          { icon: "menu-outline",     label: "More",     key: "more",     route: null },
         ].map((item) => {
           const isActive = item.key === "saved";
           return (
@@ -483,18 +490,17 @@ export function LibraryScreen() {
               key={item.key}
               style={[styles.bottomNavItem, isActive && styles.activeSearchPill]}
               onPress={() => item.route && router.push(item.route as any)}
-              activeOpacity={item.route ? 0.7 : 1}
+              activeOpacity={0.7}
             >
               <Ionicons
                 name={item.icon as any}
                 size={22}
-                color={isActive ? "#422515" : item.route ? "#554438" : "#B0A89E"}
+                color={isActive ? "#422515" : "#554438"}
               />
               <Text
                 style={[
                   styles.bottomNavLabel,
                   isActive && { fontWeight: "800", color: "#422515" },
-                  !item.route && { color: "#B0A89E" },
                 ]}
               >
                 {item.label}
@@ -729,65 +735,68 @@ const styles = StyleSheet.create({
     fontWeight: "700",
   },
 
-  // List mode book row
-  bookRow: {
+  // List mode book card — matches SearchScreen style
+  bookCard: {
     flexDirection: "row",
-    alignItems: "flex-start",
     backgroundColor: "#F5F1EC",
     marginHorizontal: 16,
+    marginBottom: 12,
     borderRadius: 12,
+    borderWidth: 1,
+    borderColor: "#D8D0C5",
     padding: 12,
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.06,
-    shadowRadius: 3,
-    elevation: 1,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 2,
   },
-  bookRowCoverShadow: {
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.22,
-    shadowRadius: 6,
-    elevation: 4,
-  },
-  bookRowCover: {
-    width: 72,
-    height: 108,
-    borderRadius: 4,
+  bookCover: {
+    width: 66,
+    height: 98,
+    borderRadius: 6,
     backgroundColor: "#DFD9CF",
   },
-  bookRowInfo: {
+  bookInfo: {
     flex: 1,
     marginLeft: 14,
-    paddingTop: 2,
+    justifyContent: "center",
   },
-  bookRowTitle: {
-    fontSize: 14,
+  bookTitle: {
+    fontSize: 16,
     fontWeight: "800",
     color: "#281D17",
-    lineHeight: 19,
     fontFamily: "serif",
+    lineHeight: 20,
   },
-  bookRowAuthor: {
-    fontSize: 12,
-    color: "#7D6E63",
-    marginTop: 3,
-    fontWeight: "500",
+  bookAuthor: {
+    fontSize: 13,
+    color: "#5C4A3E",
+    marginTop: 2,
   },
   starsRow: {
     flexDirection: "row",
     marginTop: 6,
+    alignItems: "center",
   },
-  shelfBadge: {
+  badgePill: {
     alignSelf: "flex-start",
     paddingHorizontal: 10,
     paddingVertical: 3,
-    borderRadius: 10,
+    borderRadius: 12,
     marginTop: 8,
   },
-  shelfBadgeText: {
-    fontSize: 10,
+  badgeText: {
+    fontSize: 11,
     fontWeight: "700",
+  },
+  cardActions: {
+    justifyContent: "space-between",
+    alignItems: "flex-end",
+    paddingLeft: 4,
+  },
+  actionBtn: {
+    padding: 4,
   },
   progressRow: {
     flexDirection: "row",
@@ -803,7 +812,7 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   progressFill: {
-    height: "100%",
+    height: "100%" as any,
     backgroundColor: "#1F6B38",
     borderRadius: 2,
   },
@@ -812,56 +821,68 @@ const styles = StyleSheet.create({
     color: "#7D6E63",
     fontWeight: "600",
   },
-  rowActions: {
-    alignItems: "center",
-    paddingTop: 4,
-    marginLeft: 6,
-  },
   separator: { height: 10 },
 
-  // Grid mode
+  // Grid mode — matches SearchScreen grid style
   gridColumnWrapper: {
-    justifyContent: "space-between",
     paddingHorizontal: 16,
+    justifyContent: "space-between",
+    marginBottom: 12,
   },
   gridCard: {
-    width: (width - 48) / 2,
+    width: (width - 44) / 2,
     backgroundColor: "#F5F1EC",
     borderRadius: 12,
-    marginBottom: 12,
+    borderWidth: 1,
+    borderColor: "#D8D0C5",
+    padding: 10,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.05,
     shadowRadius: 4,
     elevation: 2,
-    overflow: "hidden",
   },
-  gridCoverShadow: { position: "relative" },
-  gridCover: {
+  gridCoverWrapper: {
+    position: "relative",
     width: "100%",
-    height: 180,
+    height: 155,
+    borderRadius: 8,
+    overflow: "hidden",
     backgroundColor: "#DFD9CF",
+  },
+  gridCoverImg: {
+    width: "100%" as any,
+    height: "100%" as any,
   },
   gridHeartBtn: {
     position: "absolute",
-    top: 8,
-    right: 8,
-    zIndex: 10,
+    top: 6,
+    right: 6,
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: "rgba(245, 241, 236, 0.9)",
+    alignItems: "center",
+    justifyContent: "center",
   },
   gridInfo: {
-    padding: 10,
+    marginTop: 8,
   },
   gridTitle: {
     fontSize: 13,
     fontWeight: "800",
     color: "#281D17",
-    lineHeight: 17,
     fontFamily: "serif",
+    lineHeight: 17,
   },
   gridAuthor: {
     fontSize: 11,
     color: "#7D6E63",
     marginTop: 2,
+  },
+  gridStarsRow: {
+    flexDirection: "row",
+    marginTop: 4,
   },
 
   // Empty state

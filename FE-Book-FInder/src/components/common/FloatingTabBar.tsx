@@ -3,7 +3,6 @@ import { Href, usePathname, useRouter } from "expo-router";
 import { Pressable, StyleSheet, View } from "react-native";
 
 const tabs = [
-  { key: "home", label: "Home", icon: "home", route: "/library" },
   { key: "explore", label: "Explore", icon: "compass", route: "/search" },
   { key: "saved", label: "Saved books", icon: "bookmark", route: "/saved" },
 ] as const;
@@ -11,13 +10,7 @@ const tabs = [
 export default function FloatingTabBar() {
   const pathname = usePathname();
   const router = useRouter();
-  const activeTab = pathname.startsWith("/book/")
-    ? "explore"
-    : pathname === "/search"
-      ? "explore"
-      : pathname === "/saved"
-        ? "saved"
-        : "home";
+  const activeTab = pathname === "/saved" ? "saved" : "explore";
 
   return (
     <View pointerEvents="box-none" style={styles.overlay}>

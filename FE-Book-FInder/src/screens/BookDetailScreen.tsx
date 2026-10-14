@@ -735,38 +735,24 @@ export function BookDetailScreen({ book, onBack, onUpdateShelf }: BookDetailScre
 
       {/* BOTTOM NAVIGATION BAR */}
       <View style={styles.bottomNavContainer}>
-        <TouchableOpacity
-          style={styles.bottomNavItem}
-          onPress={() => router.push("/")}
-          activeOpacity={0.7}
-        >
-          <Feather name="home" size={20} color="#554438" />
-          <Text style={styles.bottomNavLabel}>Home</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.bottomNavItem}
-          onPress={() => router.push("/library")}
-          activeOpacity={0.7}
-        >
-          <Feather name="book" size={20} color="#554438" />
-          <Text style={styles.bottomNavLabel}>My Books</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.bottomNavItem} activeOpacity={0.7}>
-          <Feather name="compass" size={20} color="#554438" />
-          <Text style={styles.bottomNavLabel}>Discover</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={[styles.bottomNavItem, styles.activeSearchPill]} activeOpacity={0.7}>
-          <Feather name="search" size={20} color="#3E2723" />
-          <Text style={[styles.bottomNavLabel, { color: "#3E2723", fontWeight: "700" }]}>Search</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.bottomNavItem} activeOpacity={0.7}>
-          <Feather name="menu" size={20} color="#554438" />
-          <Text style={styles.bottomNavLabel}>More</Text>
-        </TouchableOpacity>
+        {[
+          { icon: "compass-outline", label: "Discover", key: "discover", route: "/search" },
+          { icon: "bookmark-outline", label: "Saved", key: "saved", route: "/saved" },
+        ].map((item) => (
+          <TouchableOpacity
+            key={item.key}
+            style={styles.bottomNavItem}
+            onPress={() => router.push(item.route as any)}
+            activeOpacity={0.7}
+          >
+            <Ionicons
+              name={item.icon as any}
+              size={22}
+              color="#554438"
+            />
+            <Text style={styles.bottomNavLabel}>{item.label}</Text>
+          </TouchableOpacity>
+        ))}
       </View>
     </SafeAreaView>
   );

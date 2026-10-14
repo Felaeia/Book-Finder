@@ -137,7 +137,7 @@ export default function SearchScreen() {
   useEffect(() => {
     libraryApi.getBooks("favorites").then((favs) => {
       setFavoriteIds(new Set(favs.map((b) => b.id)));
-    }).catch(() => {});
+    }).catch(() => { });
   }, []);
 
   const openBook = (book: { id: string }) => {
@@ -179,7 +179,7 @@ export default function SearchScreen() {
     try {
       const favs = await libraryApi.getBooks("favorites");
       setFavoriteIds(new Set(favs.map((b) => b.id)));
-    } catch {}
+    } catch { }
     setTimeout(() => setRefreshing(false), 600);
   };
 
@@ -383,10 +383,10 @@ export default function SearchScreen() {
       {/* ── Highlights / Quick Stats Strip (Matches screenshot) ── */}
       <View style={styles.statsStrip}>
         {[
-          { label: "Trending",  value: "★ 4.8", color: "#1F6B38", key: "fiction" },
-          { label: "Romance",   value: "Top 10", color: "#C0392B", key: "romance" },
-          { label: "Fantasy",   value: "Magic",  color: "#785921", key: "fantasy" },
-          { label: "Classics",  value: "100+",   color: "#422515", key: "classics" },
+          { label: "Trending", value: "★ 4.8", color: "#1F6B38", key: "fiction" },
+          { label: "Romance", value: "Top 10", color: "#C0392B", key: "romance" },
+          { label: "Fantasy", value: "Magic", color: "#785921", key: "fantasy" },
+          { label: "Classics", value: "100+", color: "#422515", key: "classics" },
         ].map((item, i) => (
           <TouchableOpacity
             key={item.label}
@@ -663,11 +663,8 @@ export default function SearchScreen() {
       {/* ── Bottom Navigation Bar — Discover Active ── */}
       <View style={styles.bottomNavContainer}>
         {[
-          { icon: "home-outline",     label: "Home",     key: "home",     route: null },
-          { icon: "compass-outline",  label: "Discover", key: "discover", route: "/search" },
-          { icon: "search-outline",   label: "Search",   key: "search",   route: "/search" },
-          { icon: "bookmark-outline", label: "Saved",    key: "saved",    route: "/saved" },
-          { icon: "menu-outline",     label: "More",     key: "more",     route: null },
+          { icon: "compass-outline", label: "Discover", key: "discover", route: "/search" },
+          { icon: "bookmark-outline", label: "Saved", key: "saved", route: "/saved" },
         ].map((item) => {
           const isActive = item.key === "discover";
           return (
@@ -675,18 +672,17 @@ export default function SearchScreen() {
               key={item.key}
               style={[styles.bottomNavItem, isActive && styles.activeSearchPill]}
               onPress={() => item.route && router.push(item.route as any)}
-              activeOpacity={item.route ? 0.7 : 1}
+              activeOpacity={0.7}
             >
               <Ionicons
                 name={item.icon as any}
                 size={22}
-                color={isActive ? "#422515" : item.route ? "#554438" : "#B0A89E"}
+                color={isActive ? "#422515" : "#554438"}
               />
               <Text
                 style={[
                   styles.bottomNavLabel,
                   isActive && { fontWeight: "800", color: "#422515" },
-                  !item.route && { color: "#B0A89E" },
                 ]}
               >
                 {item.label}
