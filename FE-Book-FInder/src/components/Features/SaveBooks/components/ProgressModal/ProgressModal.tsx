@@ -26,9 +26,11 @@ export interface ProgressModalProps {
 }
 
 const SHELVES: { key: Exclude<ShelfType, "all">; label: string; icon: string }[] = [
+  { key: "bookmarks", label: "Bookmarks", icon: "🔖" },
+  { key: "want_to_read", label: "Want to Read", icon: "⏳" },
   { key: "reading", label: "Reading", icon: "📖" },
-  { key: "want_to_read", label: "Want to Read", icon: "🔖" },
   { key: "completed", label: "Completed", icon: "✅" },
+  { key: "favorites", label: "Favorites", icon: "❤️" },
 ];
 
 export function ProgressModal({

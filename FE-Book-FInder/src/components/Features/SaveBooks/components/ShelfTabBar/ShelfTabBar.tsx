@@ -1,12 +1,11 @@
 import React from "react";
 import { StyleSheet, Text, View, TouchableOpacity, ScrollView } from "react-native";
 import { ShelfType } from "../../lib/types";
-import { Colors } from "@/src/theme/colors";
 
 export interface ShelfTab {
   key: ShelfType;
   label: string;
-  count: number;
+  count?: number;
 }
 
 export interface ShelfTabBarProps {
@@ -29,7 +28,7 @@ export function ShelfTabBar({ activeTab, tabs, onSelectTab }: ShelfTabBarProps) 
             <TouchableOpacity
               key={tab.key}
               onPress={() => onSelectTab(tab.key)}
-              activeOpacity={0.7}
+              activeOpacity={0.8}
               style={[
                 styles.tabButton,
                 isActive ? styles.activeTabButton : styles.inactiveTabButton,
@@ -43,21 +42,6 @@ export function ShelfTabBar({ activeTab, tabs, onSelectTab }: ShelfTabBarProps) 
               >
                 {tab.label}
               </Text>
-              <View
-                style={[
-                  styles.countBadge,
-                  isActive ? styles.activeCountBadge : styles.inactiveCountBadge,
-                ]}
-              >
-                <Text
-                  style={[
-                    styles.countText,
-                    isActive ? styles.activeCountText : styles.inactiveCountText,
-                  ]}
-                >
-                  {tab.count}
-                </Text>
-              </View>
             </TouchableOpacity>
           );
         })}
@@ -68,58 +52,47 @@ export function ShelfTabBar({ activeTab, tabs, onSelectTab }: ShelfTabBarProps) 
 
 const styles = StyleSheet.create({
   container: {
-    marginVertical: 12,
+    marginTop: 18,
+    marginBottom: 6,
   },
   scrollContent: {
     paddingHorizontal: 16,
-    gap: 8,
-  },
-  tabButton: {
     flexDirection: "row",
     alignItems: "center",
-    paddingHorizontal: 14,
-    paddingVertical: 8,
+    gap: 10,
+  },
+  tabButton: {
+    paddingHorizontal: 18,
+    paddingVertical: 9,
     borderRadius: 24,
-    borderWidth: 1,
+    alignItems: "center",
+    justifyContent: "center",
   },
   activeTabButton: {
-    backgroundColor: Colors.primary,
-    borderColor: Colors.primary,
+    backgroundColor: "#EA580C",
+    shadowColor: "#EA580C",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.35,
+    shadowRadius: 6,
+    elevation: 3,
   },
   inactiveTabButton: {
-    backgroundColor: Colors.card,
-    borderColor: Colors.border,
+    backgroundColor: "#FFFFFF",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.08,
+    shadowRadius: 4,
+    elevation: 1,
   },
   tabLabel: {
     fontSize: 13,
-    fontWeight: "600",
   },
   activeTabLabel: {
     color: "#FFFFFF",
-  },
-  inactiveTabLabel: {
-    color: Colors.textSecondary,
-  },
-  countBadge: {
-    marginLeft: 6,
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-    borderRadius: 12,
-  },
-  activeCountBadge: {
-    backgroundColor: "rgba(255, 255, 255, 0.25)",
-  },
-  inactiveCountBadge: {
-    backgroundColor: "#F1F5F9",
-  },
-  countText: {
-    fontSize: 11,
     fontWeight: "700",
   },
-  activeCountText: {
-    color: "#FFFFFF",
-  },
-  inactiveCountText: {
-    color: Colors.textSecondary,
+  inactiveTabLabel: {
+    color: "#374151",
+    fontWeight: "600",
   },
 });

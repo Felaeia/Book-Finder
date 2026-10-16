@@ -4,7 +4,7 @@ import { Colors } from "@/src/theme/colors";
 
 export interface BadgeProps {
   label: string;
-  variant?: "reading" | "want_to_read" | "completed" | "favorites" | "default";
+  variant?: "reading" | "want_to_read" | "completed" | "favorites" | "bookmarks" | "default";
   size?: "sm" | "md";
   style?: ViewStyle;
   textStyle?: TextStyle;
@@ -30,6 +30,12 @@ export function Badge({ label, variant = "default", size = "sm", style, textStyl
           backgroundColor: Colors.shelves.completed.bg,
           borderColor: Colors.shelves.completed.border,
           textColor: Colors.shelves.completed.text,
+        };
+      case "bookmarks":
+        return {
+          backgroundColor: Colors.shelves.bookmarks.bg,
+          borderColor: Colors.shelves.bookmarks.border,
+          textColor: Colors.shelves.bookmarks.text,
         };
       case "favorites":
         return {

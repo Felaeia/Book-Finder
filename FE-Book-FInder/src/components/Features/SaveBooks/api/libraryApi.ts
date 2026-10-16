@@ -28,6 +28,9 @@ export const libraryApi = {
     if (shelf === "favorites") {
       return booksStore.filter((b) => b.isFavorite);
     }
+    if (shelf === "bookmarks") {
+      return booksStore.filter((b) => b.isBookmarked);
+    }
     return booksStore.filter((b) => b.shelf === shelf);
   },
 
@@ -82,6 +85,19 @@ export const libraryApi = {
     return updatedBook;
   },
 
+  async toggleBookmark(bookId: string): Promise<Book> {
+    const index = booksStore.findIndex((b) => b.id === bookId);
+    if (index === -1) throw new Error("Book not found");
+
+    const book = booksStore[index];
+    const updatedBook: Book = {
+      ...book,
+      isBookmarked: !book.isBookmarked,
+    };
+    booksStore[index] = updatedBook;
+    return updatedBook;
+  },
+
   async updateRating(bookId: string, rating: number): Promise<Book> {
     const index = booksStore.findIndex((b) => b.id === bookId);
     if (index === -1) throw new Error("Book not found");
@@ -100,19 +116,24 @@ export const libraryApi = {
   },
 
   async getStats(): Promise<LibraryStats> {
-    const totalBooks = booksStore.length;
+    const shelved = booksStore.length;
+    const favorites = booksStore.filter((b) => b.isFavorite).length;
+    const bookmarks = booksStore.filter((b) => b.isBookmarked).length;
+    const wantToRead = booksStore.filter((b) => b.shelf === "want_to_read").length;
     const booksReading = booksStore.filter((b) => b.shelf === "reading").length;
-    const booksWantToRead = booksStore.filter((b) => b.shelf === "want_to_read").length;
     const booksCompleted = booksStore.filter((b) => b.shelf === "completed").length;
-    const booksFavorites = booksStore.filter((b) => b.isFavorite).length;
     const pagesRead = booksStore.reduce((sum, b) => sum + b.currentPage, 0);
 
     return {
-      totalBooks,
+      shelved,
+      favorites,
+      bookmarks,
+      wantToRead,
+      totalBooks: shelved,
       booksReading,
-      booksWantToRead,
+      booksWantToRead: wantToRead,
       booksCompleted,
-      booksFavorites,
+      booksFavorites: favorites,
       pagesRead,
     };
   },
